@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "✨ Running Prettier and ESLint on staged files..."
+npx lint-staged
+
+echo "🔍 Running ESLint check..."
+npm run lint:check
+
+if [ $? -ne 0 ]; then
+  echo "❌ ESLint check failed. Please fix the errors before committing."
+  exit 1
+fi
+
+echo "🔨 Running build check..."
+npm run build
+
+if [ $? -ne 0 ]; then
+  echo "❌ Build failed. Please fix the build errors before committing."
+  exit 1
+fi
+
+echo "✅ All checks passed! Code formatted and ready to commit..."
