@@ -1,11 +1,11 @@
-import { kit } from "@/config/wallet-kit";
-import { useWallet } from "@/lib/wallet-context";
+import { stellarWalletKit } from "@/components/modules/auth/helpers/stellar-wallet-kit.helper";
+import { useWalletContext } from "@/providers/wallet.provider";
 import { ISupportedWallet } from "@creit.tech/stellar-wallets-kit";
 import { useState } from "react";
 
-export const useWalletKit = () => {
+export const useWallet = () => {
   // Get wallet info from wallet context
-  const { setWalletInfo, clearWalletInfo, walletAddress, walletName } = useWallet();
+  const { setWalletInfo, clearWalletInfo, walletAddress, walletName } = useWalletContext();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   /**
@@ -19,12 +19,12 @@ export const useWalletKit = () => {
 
     try {
       setIsModalOpen(true);
-      await kit.openModal({
+      await stellarWalletKit.openModal({
         modalTitle: "Connect to your favorite wallet",
         onWalletSelected: async (option: ISupportedWallet) => {
           try {
-            kit.setWallet(option.id);
-            const { address } = await kit.getAddress();
+            stellarWalletKit.setWallet(option.id);
+            const { address } = await stellarWalletKit.getAddress();
             const { name } = option;
             setWalletInfo(address, name);
             setIsModalOpen(false);
@@ -84,7 +84,7 @@ export const useWalletKit = () => {
 
     try {
       // First try message signing (supported by Freighter, etc.)
-      const result = await kit.signMessage(message, {
+      const result = await stellarWalletKit.signMessage(message, {
         address: walletAddress,
       });
       

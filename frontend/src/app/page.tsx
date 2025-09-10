@@ -1,5 +1,5 @@
-import Dashboard from "./components/dashboard";
+import Home from "@/components/modules/auth/ui/pages/Home";
 
-export default function Home() {
-  return <Dashboard />;
+export default function Page() {
+  return <Home />;
 }
