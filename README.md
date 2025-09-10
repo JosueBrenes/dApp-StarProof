@@ -1,36 +1,154 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StarProof dApp
 
-## Getting Started
+A decentralized application (dApp) that allows users to connect their Stellar wallet and generate API keys for the StarProof API service. Built with Next.js 15.5.0 and Stellar Wallet Kit integration.
 
-First, run the development server:
+## 🚀 Features
+
+- **Stellar Wallet Integration**: Connect with popular Stellar wallets (Freighter, Albedo, xBull, Lobstr, Rabet)
+- **API Key Generation**: Generate secure API keys authenticated with wallet signatures
+- **Key Management**: View, regenerate, and manage your API keys
+- **Environment Configuration**: Auto-generate environment variables for easy API integration
+- **Testnet Support**: Full support for Stellar Testnet operations
+- **Responsive Design**: Modern, responsive UI built with Tailwind CSS
+
+## 🛠 Technology Stack
+
+- **Frontend**: Next.js 15.5.0 with TypeScript
+- **Blockchain**: Stellar Network (Testnet)
+- **Wallet Integration**: @creit.tech/stellar-wallets-kit
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **Build Tool**: Turbopack
+
+## 📋 Prerequisites
+
+Before running the application, make sure you have:
+
+- Node.js 18+ installed
+- A Stellar wallet (Freighter, Albedo, etc.)
+- The StarProof API backend running on `http://localhost:8080`
+
+## 🚀 Getting Started
+
+1. **Clone and navigate to the project**:
+   ```bash
+   cd dApp-StarProof/frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+4. **Open your browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🔧 Available Scripts
+
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run lint` - Run ESLint for code quality checks
+
+## 📱 How to Use
+
+1. **Connect Your Wallet**: Click "Connect Wallet" and select your preferred Stellar wallet
+2. **Generate API Key**: Once connected, click "Generate API Key" to create a new key
+3. **Copy Configuration**: Use the generated environment variables in your projects
+4. **Use the API**: Make requests to StarProof API using your generated key
+
+### Example API Usage
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Test API connection
+curl -X GET http://localhost:8080/v1/health \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# Access templates
+curl -X GET http://localhost:8080/v1/templates \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### JavaScript Integration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```javascript
+const response = await fetch('http://localhost:8080/v1/templates', {
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  }
+});
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🏗 Project Structure
 
-## Learn More
+```
+src/
+├── app/                          # Next.js App Router
+├── components/
+│   └── modules/
+│       └── auth/
+│           ├── helpers/          # Wallet configuration
+│           ├── hooks/            # Wallet integration hooks
+│           └── ui/               # UI components
+├── hooks/                        # Custom React hooks
+├── providers/                    # React context providers
+├── @types/                       # TypeScript type definitions
+└── config/                       # Configuration files
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🔐 Security Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Cryptographic Authentication**: API keys are generated using wallet signatures
+- **Secure Key Storage**: Keys stored locally in browser storage
+- **Wallet Fallback**: Automatic fallback for wallets without signMessage support
+- **Network Isolation**: Testnet-only operations for development safety
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🌐 Supported Wallets
 
-## Deploy on Vercel
+- **Freighter**: Full support with message signing
+- **Albedo**: Supported with fallback authentication
+- **xBull**: Full support with message signing
+- **Lobstr**: Supported with fallback authentication
+- **Rabet**: Supported with fallback authentication
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ⚙️ Environment Configuration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The dApp automatically generates environment variables for your projects:
+
+```bash
+# StarProof API Configuration
+STARPROOF_API_KEY=your_generated_key_here
+STARPROOF_API_URL=http://localhost:8080/v1
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Wallet Connection Failed**: Ensure your wallet extension is installed and unlocked
+2. **API Key Generation Failed**: Check that the StarProof API backend is running
+3. **Signature Failed**: Some wallets may not support message signing, fallback authentication will be used
+
+### Development Issues
+
+- **Build Errors**: Run `npm run lint` to check for TypeScript/ESLint errors
+- **Port Conflicts**: Change the dev server port using `npm run dev -- --port 3001`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests: `npm run lint` and `npm run build`
+5. Submit a pull request
+
+## 📄 License
+
+This project is part of the StarProof ecosystem. Please refer to the main project license.
