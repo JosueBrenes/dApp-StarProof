@@ -1,0 +1,64 @@
+"use client";
+
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
+type WalletContextType = {
+  walletAddress: string | null;
+  walletName: string | null;
+  setWalletInfo: (address: string, name: string) => void;
+  clearWalletInfo: () => void;
+};
+
+const WalletContext = createContext<WalletContextType | undefined>(undefined);
+
+export function WalletProvider({ children }: { children: ReactNode }) {
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [walletName, setWalletName] = useState<string | null>(null);
+
+  // Load wallet info from localStorage on mount
+  useEffect(() => {
+    const storedAddress = localStorage.getItem("walletAddress");
+    const storedName = localStorage.getItem("walletName");
+
+    if (storedAddress) setWalletAddress(storedAddress);
+    if (storedName) setWalletName(storedName);
+  }, []);
+
+  /**
+   * Set wallet info
+   * @param address - Wallet address
+   * @param name - Wallet name
+   */
+  const setWalletInfo = (address: string, name: string) => {
+    setWalletAddress(address);
+    setWalletName(name);
+    localStorage.setItem("walletAddress", address);
+    localStorage.setItem("walletName", name);
+  };
+
+  /**
+   * Clear wallet info
+   */
+  const clearWalletInfo = () => {
+    setWalletAddress(null);
+    setWalletName(null);
+    localStorage.removeItem("walletAddress");
+    localStorage.removeItem("walletName");
+  };
+
+  return (
+    <WalletContext.Provider
+      value={{ walletAddress, walletName, setWalletInfo, clearWalletInfo }}
+    >
+      {children}
+    </WalletContext.Provider>
+  );
+}
+
+export function useWallet() {
+  const context = useContext(WalletContext);
+  if (context === undefined) {
+    throw new Error('useWallet must be used within a WalletProvider');
+  }
+  return context;
+}
