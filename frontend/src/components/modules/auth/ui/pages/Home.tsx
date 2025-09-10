@@ -6,7 +6,7 @@ import { useApiKey } from '@/hooks/useApiKey.hook';
 import { Copy, Check, Eye, EyeOff } from 'lucide-react';
 
 export default function Home() {
-  const { isConnected, walletAddress, walletName, handleConnect, handleDisconnect } = useWallet();
+  const { isConnected, walletAddress, handleConnect, handleDisconnect } = useWallet();
   const { apiKey, isLoading, error, generateApiKey, loadApiKey, clearApiKey } = useApiKey();
   const [copied, setCopied] = useState(false);
   const [showKey, setShowKey] = useState(false);

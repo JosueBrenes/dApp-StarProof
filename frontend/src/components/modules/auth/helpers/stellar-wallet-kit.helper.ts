@@ -10,7 +10,6 @@ import {
   allowAllModules,
 } from "@creit.tech/stellar-wallets-kit";
 import { setAllowedWallets } from "@creit.tech/stellar-wallets-kit/state/store";
-import { NETWORK_CONFIG } from "@/config/contracts";
 
 // Network passphrases
 const NETWORK_PASSPHRASES = {

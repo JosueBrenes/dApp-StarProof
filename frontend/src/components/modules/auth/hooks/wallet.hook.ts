@@ -99,7 +99,7 @@ export const useWallet = () => {
         errorType: typeof error,
         errorConstructor: error?.constructor?.name,
         errorString: String(error),
-        errorMessage: error?.message,
+        errorMessage: (error as Error)?.message,
         walletName
       });
       
@@ -108,7 +108,7 @@ export const useWallet = () => {
       
       // Check various ways the error might indicate unsupported signMessage
       const errorMessage = error && typeof error === 'object' && 'message' in error 
-        ? error.message 
+        ? String(error.message)
         : String(error);
       
       const isUnsupportedSignMessage = 
