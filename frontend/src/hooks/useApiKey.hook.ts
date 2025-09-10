@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from 'react';
-import { useWalletKit } from '@/hooks/useWalletKit';
+import { useWallet } from '@/components/modules/auth/hooks/wallet.hook';
 
 interface ApiKeyData {
   key: string;
@@ -12,7 +12,7 @@ export function useApiKey() {
   const [apiKey, setApiKey] = useState<ApiKeyData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { walletAddress, signMessage, isConnected } = useWalletKit();
+  const { walletAddress, signMessage, isConnected } = useWallet();
 
   const generateApiKey = useCallback(async () => {
     if (!isConnected || !walletAddress) {

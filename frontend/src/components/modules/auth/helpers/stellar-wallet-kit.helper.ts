@@ -48,7 +48,7 @@ function getWalletNetwork(): WalletNetwork {
  * Stellar Wallets Kit for StarProof
  * @Reference URL: https://stellarwalletskit.dev
  */
-export const kit: StellarWalletsKit = new StellarWalletsKit({
+export const stellarWalletKit: StellarWalletsKit = new StellarWalletsKit({
   network: getWalletNetwork(),
   selectedWalletId: FREIGHTER_ID,
   modules:
@@ -64,7 +64,7 @@ export const kit: StellarWalletsKit = new StellarWalletsKit({
 });
 
 // Force Lobstr and Rabet modules to be marked as available
-kit.getSupportedWallets().then((wallets) => {
+stellarWalletKit.getSupportedWallets().then((wallets) => {
   const updated = wallets.map((w) =>
     w.id === "lobstr" || w.id === "rabet" ? { ...w, isAvailable: true } : w,
   );
