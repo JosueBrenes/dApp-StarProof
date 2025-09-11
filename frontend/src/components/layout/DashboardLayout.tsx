@@ -6,10 +6,11 @@ import { Sidebar } from "./Sidebar";
 import { Dashboard } from "@/components/modules/dashboard/Dashboard";
 import { Profile } from "@/components/modules/profile/Profile";
 import { ApiKey } from "@/components/modules/api-key/ApiKey";
+import { CreateCredential } from "@/components/modules/credentials/CreateCredential";
 import { Button } from "@/components/ui/button";
 import { Wallet } from "lucide-react";
 
-type SectionType = "dashboard" | "profile" | "api-key";
+type SectionType = "dashboard" | "profile" | "api-key" | "credentials";
 
 export function DashboardLayout() {
   const { isConnected, handleConnect } = useWallet();
@@ -57,6 +58,8 @@ export function DashboardLayout() {
         return <Profile />;
       case "api-key":
         return <ApiKey />;
+      case "credentials":
+        return <CreateCredential />;
       default:
         return <Dashboard />;
     }

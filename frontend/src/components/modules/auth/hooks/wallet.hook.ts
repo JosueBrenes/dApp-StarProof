@@ -26,7 +26,7 @@ export const useWallet = () => {
             stellarWalletKit.setWallet(option.id);
             const { address } = await stellarWalletKit.getAddress();
             const { name } = option;
-            setWalletInfo(address, name);
+            await setWalletInfo(address, name);
             setIsModalOpen(false);
           } catch (error) {
             console.error("Error selecting wallet:", error);
