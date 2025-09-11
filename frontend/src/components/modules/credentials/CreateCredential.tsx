@@ -55,7 +55,9 @@ export function CreateCredential() {
     useState<CredentialContract | null>(null);
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [showQrModal, setShowQrModal] = useState(false);
-  const [userCredentials, setUserCredentials] = useState<CredentialContract[]>([]);
+  const [userCredentials, setUserCredentials] = useState<CredentialContract[]>(
+    []
+  );
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedCredential, setSelectedCredential] = useState<any>(null);
@@ -76,7 +78,7 @@ export function CreateCredential() {
     const testApiConnection = async () => {
       try {
         const health = await apiService.getHealth();
-        if (health.status === 'ok' || health.status === 'healthy') {
+        if (health.status === "ok" || health.status === "healthy") {
           console.log("✅ API backend is running and accessible");
         } else {
           console.warn("⚠️ API backend responded with status:", health.status);
@@ -136,6 +138,22 @@ export function CreateCredential() {
     setSelectedCredential(credential);
     setDetailCardFlipped(false);
     setShowDetailModal(true);
+  };
+
+  const formatIssuerName = (issuer: string): string => {
+    if (!issuer) {
+      return "StarProof";
+    }
+
+    // If it's a Stellar wallet address (starts with G and is 56 characters)
+    if (issuer.startsWith("G") && issuer.length === 56) {
+      // Return a shortened version with "StarProof" as the main name
+      const shortAddress = `${issuer.slice(0, 4)}...${issuer.slice(-4)}`;
+      return `StarProof (${shortAddress})`;
+    }
+
+    // If it's not a Stellar address, return as is or default
+    return issuer || "StarProof";
   };
 
   const handleCreateCredential = async () => {
@@ -207,50 +225,66 @@ export function CreateCredential() {
 
       // Store credential locally associated with wallet
       if (walletAddress) {
-        const existingCredentials = localStorage.getItem(`credentials_${walletAddress}`);
-        const credentials = existingCredentials ? JSON.parse(existingCredentials) : [];
-        const newCredential = { ...contract, qrCode: qrDataUrl, credentialData };
+        const existingCredentials = localStorage.getItem(
+          `credentials_${walletAddress}`
+        );
+        const credentials = existingCredentials
+          ? JSON.parse(existingCredentials)
+          : [];
+        const newCredential = {
+          ...contract,
+          qrCode: qrDataUrl,
+          credentialData,
+        };
         credentials.unshift(newCredential); // Add to beginning of array
-        localStorage.setItem(`credentials_${walletAddress}`, JSON.stringify(credentials));
+        localStorage.setItem(
+          `credentials_${walletAddress}`,
+          JSON.stringify(credentials)
+        );
         setUserCredentials(credentials);
       }
 
-      // Check if this is a real Stellar deployment
-      const isRealStellarData = contract.transactionHash && 
-        !contract.transactionHash.startsWith('mock_') && 
-        contract.transactionHash.length > 20;
+      // Check if this is a real Stellar deployment (64-character hex transaction hash)
+      const isRealStellarData =
+        contract.transactionHash &&
+        !contract.transactionHash.startsWith("mock_") &&
+        contract.transactionHash.length === 64 &&
+        /^[a-f0-9]+$/i.test(contract.transactionHash);
 
-      const toastTitle = isRealStellarData 
-        ? "🎉 Credential Deployed to Stellar!" 
+      const toastTitle = isRealStellarData
+        ? "🎉 Credential Deployed to Stellar Testnet!"
         : "🎉 Credential Created Successfully!";
-        
+
       const toastDescription = isRealStellarData
-        ? `✅ Successfully deployed to Stellar blockchain
-📝 ID: ${contract.id.slice(-12)}
-🔗 TX Hash: ${contract.transactionHash.slice(0, 8)}...${contract.transactionHash.slice(-8)}
+        ? `✅ Successfully deployed to Stellar testnet blockchain
+📝 Credential ID: ${contract.id}
+🔗 Transaction: ${contract.transactionHash.slice(0, 8)}...${contract.transactionHash.slice(-8)}
+🌟 Real blockchain deployment - verifiable on Stellar Expert!
 📋 Verification URL ready for sharing`
         : `✅ Credential created and ready for verification
 📝 ID: ${contract.id.slice(-12)}
-🔗 Mock deployment (backend may not be connected to Stellar)
+⚠️  Mock deployment (backend may not be connected to Stellar)
 📋 Verification URL generated`;
 
       toast.success(toastTitle, {
         description: toastDescription,
         duration: 8000,
-        action: isRealStellarData ? {
-          label: "View on Stellar",
-          onClick: () => {
-            const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${contract.transactionHash}`;
-            console.log("Opening Stellar URL:", stellarUrl);
-            window.open(stellarUrl, "_blank");
-          },
-        } : {
-          label: "Copy URL",
-          onClick: () => {
-            navigator.clipboard.writeText(contract.verificationUrl);
-            toast.success("Verification URL copied!");
-          },
-        },
+        action: isRealStellarData
+          ? {
+              label: "View on Stellar",
+              onClick: () => {
+                const stellarUrl = `https://stellar.expert/explorer/testnet/tx/${contract.transactionHash}`;
+                console.log("Opening Stellar URL:", stellarUrl);
+                window.open(stellarUrl, "_blank");
+              },
+            }
+          : {
+              label: "Copy URL",
+              onClick: () => {
+                navigator.clipboard.writeText(contract.verificationUrl);
+                toast.success("Verification URL copied!");
+              },
+            },
       });
 
       // Reset form
@@ -678,30 +712,27 @@ export function CreateCredential() {
               </Button>
             </div>
           </Card>
-
         </div>
       </div>
-
 
       {/* My Credentials Section */}
       {userCredentials.length > 0 && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">
-              My Credentials
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900">My Credentials</h2>
             <div className="text-sm text-gray-500">
-              {userCredentials.length} credential{userCredentials.length !== 1 ? 's' : ''}
+              {userCredentials.length} credential
+              {userCredentials.length !== 1 ? "s" : ""}
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {userCredentials.map((credential, index) => {
               const isFlipped = flippedCards.has(credential.id);
               return (
                 <div key={credential.id} className="group">
                   <div className="relative w-full max-w-md mx-auto cursor-pointer hover:scale-105 transition-transform">
-                    <div 
+                    <div
                       className={`mini-credential-card ${isFlipped ? "flipped" : ""}`}
                       onClick={() => openDetailModal(credential)}
                     >
@@ -725,7 +756,9 @@ export function CreateCredential() {
                                   alt="StarProof"
                                   className="w-8 h-8"
                                 />
-                                <span className="text-sm font-medium">StarProof</span>
+                                <span className="text-sm font-medium">
+                                  StarProof
+                                </span>
                               </div>
                               <CreditCard className="w-6 h-6" />
                             </div>
@@ -737,7 +770,7 @@ export function CreateCredential() {
                                   Holder
                                 </p>
                                 <p className="text-lg font-semibold truncate">
-                                  {credential.credentialData?.holder || "Unknown Holder"}
+                                  {credential.holder || "Unknown Holder"}
                                 </p>
                               </div>
 
@@ -747,7 +780,7 @@ export function CreateCredential() {
                                     Category
                                   </p>
                                   <p className="text-sm font-medium truncate">
-                                    {credential.credentialData?.category || "General"}
+                                    {credential.category || "General"}
                                   </p>
                                 </div>
                                 <div>
@@ -755,8 +788,10 @@ export function CreateCredential() {
                                     Expires
                                   </p>
                                   <p className="text-sm font-medium">
-                                    {credential.credentialData?.expires
-                                      ? new Date(credential.credentialData.expires).toLocaleDateString()
+                                    {credential.expiresAt
+                                      ? new Date(
+                                          credential.expiresAt
+                                        ).toLocaleDateString()
                                       : "N/A"}
                                   </p>
                                 </div>
@@ -770,7 +805,7 @@ export function CreateCredential() {
                                   Issued By
                                 </p>
                                 <p className="text-sm font-medium">
-                                  {credential.credentialData?.issuedBy || "StarProof"}
+                                  {credentialData.issuedBy}
                                 </p>
                               </div>
                               <div className="flex flex-col items-end">
@@ -796,7 +831,11 @@ export function CreateCredential() {
                                 Issued On
                               </p>
                               <p className="text-sm font-medium">
-                                {credential.credentialData?.issuedOn || new Date().toLocaleDateString()}
+                                {credential.issuedAt
+                                  ? new Date(
+                                      credential.issuedAt
+                                    ).toLocaleDateString()
+                                  : new Date().toLocaleDateString()}
                               </p>
                             </div>
 
@@ -805,7 +844,7 @@ export function CreateCredential() {
                                 Description
                               </p>
                               <p className="text-xs text-gray-200 leading-relaxed">
-                                {credential.credentialData?.description ||
+                                {credential.description ||
                                   "Digital credential issued by StarProof platform for secure verification and authentication."}
                               </p>
                             </div>
@@ -813,14 +852,17 @@ export function CreateCredential() {
                             <div className="flex items-center justify-between pt-4 border-t border-gray-600">
                               <div className="flex items-center space-x-2">
                                 <Sparkles className="w-4 h-4" />
-                                <span className="text-xs">Stellar Verified</span>
+                                <span className="text-xs">
+                                  Stellar Verified
+                                </span>
                               </div>
                               <div className="text-right">
                                 <p className="text-xs text-gray-300">
                                   ID: {credential.id.slice(-8)}
                                 </p>
                                 <p className="text-xs text-gray-400 mt-1">
-                                  Contract: {credential.contractAddress.slice(0, 4)}...
+                                  Contract:{" "}
+                                  {credential.contractAddress.slice(0, 4)}...
                                   {credential.contractAddress.slice(-4)}
                                 </p>
                               </div>
@@ -839,32 +881,30 @@ export function CreateCredential() {
 
       {/* QR Code Modal */}
       {showQrModal && qrCodeUrl && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setShowQrModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-lg p-6 max-w-sm w-full"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <div className="text-center">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 Scan QR Code to Verify
               </h3>
               <div className="flex justify-center mb-4">
-                <img 
-                  src={qrCodeUrl} 
-                  alt="QR Code" 
+                <img
+                  src={qrCodeUrl}
+                  alt="QR Code"
                   className="w-64 h-64 border rounded-lg"
                 />
               </div>
               <p className="text-sm text-gray-600 mb-4">
-                Scan this QR code with any camera to verify the credential authenticity
+                Scan this QR code with any camera to verify the credential
+                authenticity
               </p>
-              <Button 
-                onClick={() => setShowQrModal(false)}
-                className="w-full"
-              >
+              <Button onClick={() => setShowQrModal(false)} className="w-full">
                 Close
               </Button>
             </div>
@@ -874,13 +914,13 @@ export function CreateCredential() {
 
       {/* Credential Detail Modal */}
       {showDetailModal && selectedCredential && (
-        <div 
+        <div
           className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
           onClick={() => setShowDetailModal(false)}
         >
-          <div 
+          <div
             className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
               {/* Left Column - Large Credential Card */}
@@ -906,7 +946,9 @@ export function CreateCredential() {
 
                 {/* Large Credit Card */}
                 <div className="relative w-full max-w-md mx-auto">
-                  <div className={`credential-card ${detailCardFlipped ? "flipped" : ""}`}>
+                  <div
+                    className={`credential-card ${detailCardFlipped ? "flipped" : ""}`}
+                  >
                     {/* Front of Card */}
                     <div className="credential-front">
                       <div className="relative w-full h-56 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 rounded-xl shadow-xl overflow-hidden">
@@ -927,7 +969,9 @@ export function CreateCredential() {
                                 alt="StarProof"
                                 className="w-8 h-8"
                               />
-                              <span className="text-sm font-medium">StarProof</span>
+                              <span className="text-sm font-medium">
+                                StarProof
+                              </span>
                             </div>
                             <CreditCard className="w-6 h-6" />
                           </div>
@@ -939,7 +983,7 @@ export function CreateCredential() {
                                 Holder
                               </p>
                               <p className="text-lg font-semibold truncate">
-                                {selectedCredential.credentialData?.holder || "Unknown Holder"}
+                                {selectedCredential.holder || "Unknown Holder"}
                               </p>
                             </div>
 
@@ -949,7 +993,7 @@ export function CreateCredential() {
                                   Category
                                 </p>
                                 <p className="text-sm font-medium truncate">
-                                  {selectedCredential.credentialData?.category || "General"}
+                                  {selectedCredential.category || "General"}
                                 </p>
                               </div>
                               <div>
@@ -957,8 +1001,10 @@ export function CreateCredential() {
                                   Expires
                                 </p>
                                 <p className="text-sm font-medium">
-                                  {selectedCredential.credentialData?.expires
-                                    ? new Date(selectedCredential.credentialData.expires).toLocaleDateString()
+                                  {selectedCredential.expiresAt
+                                    ? new Date(
+                                        selectedCredential.expiresAt
+                                      ).toLocaleDateString()
                                     : "N/A"}
                                 </p>
                               </div>
@@ -972,7 +1018,7 @@ export function CreateCredential() {
                                 Issued By
                               </p>
                               <p className="text-sm font-medium">
-                                {selectedCredential.credentialData?.issuedBy || "StarProof"}
+                                {selectedCredential.issuer || "StarProof"}
                               </p>
                             </div>
                             <div className="flex flex-col items-end">
@@ -1002,7 +1048,11 @@ export function CreateCredential() {
                               Issued On
                             </p>
                             <p className="text-sm font-medium">
-                              {selectedCredential.credentialData?.issuedOn || new Date().toLocaleDateString()}
+                              {selectedCredential.issuedAt
+                                ? new Date(
+                                    selectedCredential.issuedAt
+                                  ).toLocaleDateString()
+                                : new Date().toLocaleDateString()}
                             </p>
                           </div>
 
@@ -1011,7 +1061,7 @@ export function CreateCredential() {
                               Description
                             </p>
                             <p className="text-xs text-gray-200 leading-relaxed">
-                              {selectedCredential.credentialData?.description ||
+                              {selectedCredential.description ||
                                 "Digital credential issued by StarProof platform for secure verification and authentication."}
                             </p>
                           </div>
@@ -1026,7 +1076,9 @@ export function CreateCredential() {
                                 ID: {selectedCredential.id.slice(-8)}
                               </p>
                               <p className="text-xs text-gray-400 mt-1">
-                                Contract: {selectedCredential.contractAddress.slice(0, 4)}...
+                                Contract:{" "}
+                                {selectedCredential.contractAddress.slice(0, 4)}
+                                ...
                                 {selectedCredential.contractAddress.slice(-4)}
                               </p>
                             </div>
@@ -1043,9 +1095,9 @@ export function CreateCredential() {
                     Verification QR Code
                   </h3>
                   <div className="inline-block p-4 bg-white rounded-lg shadow-lg border">
-                    <img 
-                      src={selectedCredential.qrCode} 
-                      alt="Verification QR Code" 
+                    <img
+                      src={selectedCredential.qrCode}
+                      alt="Verification QR Code"
                       className="w-48 h-48 mx-auto"
                     />
                   </div>
@@ -1056,7 +1108,9 @@ export function CreateCredential() {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      navigator.clipboard.writeText(selectedCredential.verificationUrl);
+                      navigator.clipboard.writeText(
+                        selectedCredential.verificationUrl
+                      );
                       toast.success("Verification URL copied!");
                     }}
                     className="mt-2"
@@ -1115,7 +1169,9 @@ export function CreateCredential() {
                         variant="ghost"
                         size="sm"
                         onClick={() => {
-                          navigator.clipboard.writeText(selectedCredential.contractAddress);
+                          navigator.clipboard.writeText(
+                            selectedCredential.contractAddress
+                          );
                           toast.success("Contract address copied!");
                         }}
                       >
@@ -1138,7 +1194,9 @@ export function CreateCredential() {
                           variant="ghost"
                           size="sm"
                           onClick={() => {
-                            navigator.clipboard.writeText(selectedCredential.transactionHash);
+                            navigator.clipboard.writeText(
+                              selectedCredential.transactionHash
+                            );
                             toast.success("Transaction hash copied!");
                           }}
                         >
@@ -1147,10 +1205,12 @@ export function CreateCredential() {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => window.open(
-                            `https://stellar.expert/explorer/testnet/tx/${selectedCredential.transactionHash}`,
-                            "_blank"
-                          )}
+                          onClick={() =>
+                            window.open(
+                              `https://stellar.expert/explorer/testnet/tx/${selectedCredential.transactionHash}`,
+                              "_blank"
+                            )
+                          }
                         >
                           <ExternalLink className="w-4 h-4" />
                         </Button>
@@ -1171,7 +1231,9 @@ export function CreateCredential() {
                         variant="ghost"
                         size="sm"
                         onClick={() => {
-                          navigator.clipboard.writeText(selectedCredential.verificationUrl);
+                          navigator.clipboard.writeText(
+                            selectedCredential.verificationUrl
+                          );
                           toast.success("Verification URL copied!");
                         }}
                       >
@@ -1190,28 +1252,38 @@ export function CreateCredential() {
                     </label>
                     <div className="flex items-center space-x-2">
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-green-700 font-medium">Active & Verified</span>
+                      <span className="text-sm text-green-700 font-medium">
+                        Active & Verified
+                      </span>
                     </div>
                     <p className="text-xs text-gray-600 mt-1">
-                      This credential is deployed on Stellar blockchain and ready for verification
+                      This credential is deployed on Stellar blockchain and
+                      ready for verification
                     </p>
                   </Card>
 
                   {/* Actions */}
                   <div className="flex flex-col space-y-2">
-                    <Button 
-                      onClick={() => window.open(selectedCredential.verificationUrl, "_blank")}
+                    <Button
+                      onClick={() =>
+                        window.open(
+                          selectedCredential.verificationUrl,
+                          "_blank"
+                        )
+                      }
                       className="w-full"
                     >
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Open Verification Page
                     </Button>
-                    <Button 
+                    <Button
                       variant="outline"
-                      onClick={() => window.open(
-                        `https://stellar.expert/explorer/testnet/tx/${selectedCredential.transactionHash}`,
-                        "_blank"
-                      )}
+                      onClick={() =>
+                        window.open(
+                          `https://stellar.expert/explorer/testnet/tx/${selectedCredential.transactionHash}`,
+                          "_blank"
+                        )
+                      }
                       className="w-full"
                     >
                       <Shield className="w-4 h-4 mr-2" />

@@ -45,6 +45,25 @@ export class APIService {
     console.log('API Service initialized with baseURL:', this.baseURL);
   }
 
+  /**
+   * Format issuer wallet address to display a friendly name
+   */
+  private formatIssuerName(issuerWallet?: string): string {
+    if (!issuerWallet) {
+      return "StarProof";
+    }
+    
+    // If it's a Stellar wallet address (starts with G and is 56 characters)
+    if (issuerWallet.startsWith('G') && issuerWallet.length === 56) {
+      // Return a shortened version with "StarProof" as the main name
+      const shortAddress = `${issuerWallet.slice(0, 4)}...${issuerWallet.slice(-4)}`;
+      return `StarProof (${shortAddress})`;
+    }
+    
+    // If it's not a Stellar address, return as is or default
+    return issuerWallet || "StarProof";
+  }
+
   private getApiUrl(): string {
     // Use environment variable if set
     if (process.env.NEXT_PUBLIC_API_URL) {
@@ -131,32 +150,38 @@ export class APIService {
       const onchainTxId = data.onchainTxId || data.onchain_tx_id;
       const verifyUrl = data.verifyUrl || data.verify_url;
       
-      // Check if we have real Stellar data
-      const isRealStellarData = onchainTxId && onchainTxId !== "N/A" && onchainTxId.length > 10;
+      // Check if we have real Stellar transaction hash (64 hex characters)
+      const isRealStellarTx = onchainTxId && 
+        onchainTxId !== "N/A" && 
+        onchainTxId.length === 64 && 
+        /^[a-f0-9]+$/i.test(onchainTxId);
       
       console.log("🔍 Stellar data check:", {
         onchainTxId,
-        isRealStellarData,
+        isRealStellarTx,
+        txLength: onchainTxId?.length,
         hasVerifyUrl: !!verifyUrl
       });
       
+      // For real Stellar deployments, use the transaction hash as both contract and transaction ID
+      // In Stellar, the "contract address" concept translates to the account that created the transaction
       const transformedResponse: CreateCredentialResponse = {
         success: true,
         credential: {
           id: credentialId,
           holder: credentialData.holder,
-          issuer: credentialData.issuerWallet || "StarProof",
+          issuer: this.formatIssuerName(credentialData.issuerWallet),
           category: credentialData.category,
           description: credentialData.description,
           issuedAt: new Date().toISOString(),
           expiresAt: credentialData.expiresAt,
           claims: credentialData.claims || {},
           schema: credentialData.schema,
-          contractAddress: isRealStellarData ? onchainTxId : `mock_contract_${credentialId.slice(-8)}`,
-          transactionHash: isRealStellarData ? onchainTxId : `mock_tx_${credentialId.slice(-8)}`,
+          contractAddress: isRealStellarTx ? onchainTxId : `mock_contract_${credentialId.slice(-8)}`,
+          transactionHash: isRealStellarTx ? onchainTxId : `mock_tx_${credentialId.slice(-8)}`,
           verificationUrl: verifyUrl || `https://verify.starproof.io/credentials/${credentialId}`,
         },
-        message: isRealStellarData ? "Credential deployed to Stellar blockchain" : "Credential created (mock deployment)"
+        message: isRealStellarTx ? "Credential deployed to Stellar testnet blockchain! 🎉" : "Credential created (mock deployment)"
       };
       
       return transformedResponse;

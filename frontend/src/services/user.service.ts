@@ -1,6 +1,9 @@
 import { supabase, type User, type UserProfile } from '@/lib/supabase'
 import { nanoid } from 'nanoid'
 
+// Re-export types for use in other modules
+export type { UserProfile }
+
 export class UserService {
   /**
    * Register or get user by wallet address
