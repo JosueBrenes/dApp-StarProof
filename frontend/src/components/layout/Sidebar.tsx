@@ -54,8 +54,8 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
       {/* Header */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-            <Wallet className="w-6 h-6 text-white" />
+          <div className="w-10 h-10 flex items-center justify-center">
+            <img src="/logo.png" alt="StarProof Logo" className="w-10 h-10" />
           </div>
           <div>
             <h1 className="text-xl font-bold text-gray-900">StarProof</h1>
@@ -64,31 +64,6 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
         </div>
       </div>
 
-      {/* Wallet Status */}
-      {isConnected && (
-        <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 border-b border-gray-200">
-          <div className="flex items-center space-x-3">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback className="bg-blue-100 text-blue-600 text-xs">
-                {walletAddress?.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-xs font-medium text-gray-900 truncate">
-                {formatAddress(walletAddress!)}
-              </p>
-              <div className="flex items-center space-x-2 mt-1">
-                <Badge variant="secondary" className="bg-green-100 text-green-700 text-xs">
-                  Connected
-                </Badge>
-                <Badge variant="outline" className="text-xs">
-                  Testnet
-                </Badge>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">

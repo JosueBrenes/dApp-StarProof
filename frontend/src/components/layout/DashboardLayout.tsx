@@ -20,8 +20,8 @@ export function DashboardLayout() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-xl p-8 max-w-md w-full text-center">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-6">
-            <Wallet className="w-8 h-8 text-white" />
+          <div className="w-16 h-16 flex items-center justify-center mx-auto mb-6">
+            <img src="/logo.png" alt="StarProof Logo" className="w-16 h-16" />
           </div>
           <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
