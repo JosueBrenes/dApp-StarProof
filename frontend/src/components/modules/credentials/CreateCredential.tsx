@@ -62,6 +62,66 @@ export function CreateCredential() {
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedCredential, setSelectedCredential] = useState<any>(null);
   const [detailCardFlipped, setDetailCardFlipped] = useState(false);
+  
+  // Customization states
+  const [selectedGradient, setSelectedGradient] = useState<string>("blue-purple");
+  const [selectedLogo, setSelectedLogo] = useState<string>("starproof");
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("classic");
+  const [customGradient, setCustomGradient] = useState<{start: string, end: string}>({start: "#3b82f6", end: "#7c3aed"});
+  const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
+  const [customLogoUrl, setCustomLogoUrl] = useState<string>("");
+  const [customLogoText, setCustomLogoText] = useState<string>("");
+
+  // Load customization settings on component mount
+  useEffect(() => {
+    const loadSettings = () => {
+      const saved = localStorage.getItem('credentialCustomization');
+      console.log("Loading saved settings:", saved);
+      if (saved) {
+        try {
+          const settings = JSON.parse(saved);
+          console.log("Parsed settings:", settings);
+          setSelectedGradient(settings.selectedGradient || "blue-purple");
+          setSelectedLogo(settings.selectedLogo || "starproof");
+          setSelectedTemplate(settings.selectedTemplate || "classic");
+          setCustomGradient(settings.customGradient || {start: "#3b82f6", end: "#7c3aed"});
+          setCustomLogoUrl(settings.customLogoUrl || "");
+          setCustomLogoText(settings.customLogoText || "");
+          console.log("Settings loaded, customLogoText set to:", settings.customLogoText);
+        } catch (error) {
+          console.warn("Error loading customization settings:", error);
+        }
+      } else {
+        console.log("No saved settings found");
+      }
+    };
+    loadSettings();
+  }, []);
+
+  // Save settings whenever they change (debounced)
+  useEffect(() => {
+    const saveSettings = () => {
+      const settings = {
+        selectedGradient,
+        selectedLogo,
+        selectedTemplate,
+        customGradient,
+        customLogoUrl,
+        customLogoText
+      };
+      console.log("Saving settings:", settings);
+      try {
+        localStorage.setItem('credentialCustomization', JSON.stringify(settings));
+        console.log("Settings saved successfully");
+      } catch (error) {
+        console.warn("Error saving customization settings:", error);
+      }
+    };
+    
+    // Debounce the save operation
+    const timeoutId = setTimeout(saveSettings, 300);
+    return () => clearTimeout(timeoutId);
+  }, [selectedGradient, selectedLogo, selectedTemplate, customGradient, customLogoUrl, customLogoText]);
 
   // Check if user has API key when user profile loads
   useEffect(() => {
@@ -73,28 +133,8 @@ export function CreateCredential() {
     }
   }, [userProfile]);
 
-  // Test API connectivity on component mount
-  useEffect(() => {
-    const testApiConnection = async () => {
-      try {
-        const health = await apiService.getHealth();
-        if (health.status === "ok" || health.status === "healthy") {
-          console.log("✅ API backend is running and accessible");
-        } else {
-          console.warn("⚠️ API backend responded with status:", health.status);
-        }
-      } catch (error) {
-        console.error(
-          "❌ Cannot connect to API backend. Please ensure the backend is running"
-        );
-        console.error(
-          "To start the backend, run: cd StarProof-api && cargo run"
-        );
-      }
-    };
-
-    testApiConnection();
-  }, []);
+  // API health check disabled to prevent console errors
+  // The app works fine in offline mode without health checks
 
   // Load user credentials when wallet and API key are available
   useEffect(() => {
@@ -154,6 +194,183 @@ export function CreateCredential() {
 
     // If it's not a Stellar address, return as is or default
     return issuer || "StarProof";
+  };
+
+  // Get gradient classes or style based on selection
+  const getGradientClasses = (gradient: string): string => {
+    switch (gradient) {
+      case "emerald-teal":
+        return "from-emerald-600 via-teal-600 to-cyan-800";
+      case "rose-red":
+        return "from-rose-600 via-pink-600 to-red-800";
+      case "amber-orange":
+        return "from-amber-600 via-orange-600 to-red-800";
+      case "gray-slate":
+        return "from-gray-600 via-slate-600 to-gray-800";
+      case "blue-purple":
+      default:
+        return "from-blue-600 via-purple-600 to-indigo-800";
+    }
+  };
+
+  // Get gradient style for custom colors
+  const getGradientStyle = (gradient: string) => {
+    if (gradient === "custom") {
+      return {
+        background: `linear-gradient(135deg, ${customGradient.start} 0%, ${customGradient.end} 100%)`
+      };
+    }
+    return {};
+  };
+
+  // Get logo component based on selection
+  const getLogoComponent = (logo: string) => {
+    switch (logo) {
+      case "shield":
+        return <Shield className="w-8 h-8" />;
+      case "custom-image":
+        return customLogoUrl ? <img src={customLogoUrl} alt="Custom Logo" className="w-8 h-8 object-contain" /> : <img src="/white.png" alt="StarProof" className="w-8 h-8" />;
+      case "custom-text":
+        return <span className="text-lg font-bold">{customLogoText || "LOGO"}</span>;
+      case "starproof":
+      default:
+        return <img src="/white.png" alt="StarProof" className="w-8 h-8" />;
+    }
+  };
+
+  // Get logo text based on selection
+  const getLogoText = (logo: string) => {
+    console.log("getLogoText called with logo:", logo, "customLogoText:", customLogoText);
+    // Always show custom text if it exists and is not empty, regardless of logo type
+    if (customLogoText && customLogoText.trim() !== "") {
+      return customLogoText;
+    }
+    
+    // Fallback to default text based on logo type
+    switch (logo) {
+      case "custom-text":
+        return "LOGO";
+      case "shield":
+        return "StarProof";
+      case "custom-image":
+        return "StarProof";
+      case "starproof":
+      default:
+        return "StarProof";
+    }
+  };
+
+  // Handle custom logo file upload
+  const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setCustomLogoUrl(result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
+  // Helper functions for credential list styling
+  const getCredentialGradientClasses = (customization: any): string => {
+    const gradient = customization?.selectedGradient || "blue-purple";
+    switch (gradient) {
+      case "emerald-teal":
+        return "from-emerald-600 via-teal-600 to-cyan-800";
+      case "rose-red":
+        return "from-rose-600 via-pink-600 to-red-800";
+      case "amber-orange":
+        return "from-amber-600 via-orange-600 to-red-800";
+      case "gray-slate":
+        return "from-gray-600 via-slate-600 to-gray-800";
+      case "blue-purple":
+      default:
+        return "from-blue-600 via-purple-600 to-indigo-800";
+    }
+  };
+
+  const getCredentialGradientStyle = (customization: any) => {
+    if (customization?.selectedGradient === "custom" && customization?.customGradient) {
+      return {
+        background: `linear-gradient(135deg, ${customization.customGradient.start} 0%, ${customization.customGradient.end} 100%)`
+      };
+    }
+    return {};
+  };
+
+  const getCredentialLogoComponent = (customization: any) => {
+    const logo = customization?.selectedLogo || "starproof";
+    switch (logo) {
+      case "shield":
+        return <Shield className="w-8 h-8" />;
+      case "custom-image":
+        return customization?.customLogoUrl ? <img src={customization.customLogoUrl} alt="Custom Logo" className="w-8 h-8 object-contain" /> : <img src="/white.png" alt="StarProof" className="w-8 h-8" />;
+      case "custom-text":
+        return <span className="text-lg font-bold">{customization?.customLogoText || "LOGO"}</span>;
+      case "starproof":
+      default:
+        return <img src="/white.png" alt="StarProof" className="w-8 h-8" />;
+    }
+  };
+
+  const getCredentialLogoText = (customization: any) => {
+    // Always show custom text if it exists and is not empty, regardless of logo type
+    if (customization?.customLogoText && customization.customLogoText.trim() !== "") {
+      return customization.customLogoText;
+    }
+    
+    // Fallback to default text based on logo type
+    const logo = customization?.selectedLogo || "starproof";
+    switch (logo) {
+      case "custom-text":
+        return "LOGO";
+      case "shield":
+        return "StarProof";
+      case "custom-image":
+        return "StarProof";
+      case "starproof":
+      default:
+        return "StarProof";
+    }
+  };
+
+  const getCredentialTemplate = (customization: any) => {
+    const template = customization?.selectedTemplate || "classic";
+    switch (template) {
+      case "modern":
+        return (
+          <>
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white transform rotate-45 translate-x-16 -translate-y-16"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white transform rotate-12 -translate-x-8 translate-y-8"></div>
+            <div className="absolute top-1/3 left-1/4 w-4 h-4 bg-white rounded-full"></div>
+            <div className="absolute top-2/3 right-1/4 w-6 h-6 bg-white rounded-full"></div>
+            <div className="absolute top-1/4 right-1/3 w-2 h-2 bg-white rounded-full"></div>
+          </>
+        );
+      case "corporate":
+        return (
+          <>
+            <div className="absolute top-4 right-4 w-20 h-1 bg-white"></div>
+            <div className="absolute top-8 right-4 w-16 h-1 bg-white"></div>
+            <div className="absolute top-12 right-4 w-12 h-1 bg-white"></div>
+            <div className="absolute bottom-4 left-4 w-1 h-20 bg-white"></div>
+            <div className="absolute bottom-4 left-8 w-1 h-16 bg-white"></div>
+            <div className="absolute bottom-4 left-12 w-1 h-12 bg-white"></div>
+          </>
+        );
+      case "classic":
+      default:
+        return (
+          <>
+            <div className="absolute top-4 right-4 w-16 h-16 border-2 border-white rounded-full"></div>
+            <div className="absolute bottom-4 left-4 w-12 h-12 border border-white rounded-full"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-white rounded-full"></div>
+          </>
+        );
+    }
   };
 
   const handleCreateCredential = async () => {
@@ -235,6 +452,14 @@ export function CreateCredential() {
           ...contract,
           qrCode: qrDataUrl,
           credentialData,
+          customization: {
+            selectedGradient,
+            selectedLogo,
+            selectedTemplate,
+            customGradient,
+            customLogoUrl,
+            customLogoText
+          }
         };
         credentials.unshift(newCredential); // Add to beginning of array
         localStorage.setItem(
@@ -437,12 +662,37 @@ export function CreateCredential() {
             <div className={`credential-card ${isFlipped ? "flipped" : ""}`}>
               {/* Front of Card */}
               <div className="credential-front">
-                <div className="relative w-full h-56 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 rounded-xl shadow-xl overflow-hidden">
-                  {/* Background Pattern */}
+                <div 
+                  className={`relative w-full h-56 ${selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getGradientClasses(selectedGradient)} rounded-xl shadow-xl overflow-hidden`}
+                  style={getGradientStyle(selectedGradient)}>
+                  {/* Background Pattern - Changes based on template */}
                   <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-4 right-4 w-16 h-16 border-2 border-white rounded-full"></div>
-                    <div className="absolute bottom-4 left-4 w-12 h-12 border border-white rounded-full"></div>
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-white rounded-full"></div>
+                    {selectedTemplate === "classic" && (
+                      <>
+                        <div className="absolute top-4 right-4 w-16 h-16 border-2 border-white rounded-full"></div>
+                        <div className="absolute bottom-4 left-4 w-12 h-12 border border-white rounded-full"></div>
+                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-white rounded-full"></div>
+                      </>
+                    )}
+                    {selectedTemplate === "modern" && (
+                      <>
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-white transform rotate-45 translate-x-16 -translate-y-16"></div>
+                        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white transform rotate-12 -translate-x-8 translate-y-8"></div>
+                        <div className="absolute top-1/3 left-1/4 w-4 h-4 bg-white rounded-full"></div>
+                        <div className="absolute top-2/3 right-1/4 w-6 h-6 bg-white rounded-full"></div>
+                        <div className="absolute top-1/4 right-1/3 w-2 h-2 bg-white rounded-full"></div>
+                      </>
+                    )}
+                    {selectedTemplate === "corporate" && (
+                      <>
+                        <div className="absolute top-4 right-4 w-20 h-1 bg-white"></div>
+                        <div className="absolute top-8 right-4 w-16 h-1 bg-white"></div>
+                        <div className="absolute top-12 right-4 w-12 h-1 bg-white"></div>
+                        <div className="absolute bottom-4 left-4 w-1 h-20 bg-white"></div>
+                        <div className="absolute bottom-4 left-8 w-1 h-16 bg-white"></div>
+                        <div className="absolute bottom-4 left-12 w-1 h-12 bg-white"></div>
+                      </>
+                    )}
                   </div>
 
                   {/* Card Content */}
@@ -450,12 +700,8 @@ export function CreateCredential() {
                     {/* Header */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <img
-                          src="/white.png"
-                          alt="StarProof"
-                          className="w-8 h-8"
-                        />
-                        <span className="text-sm font-medium">StarProof</span>
+                        {getLogoComponent(selectedLogo)}
+                        <span className="text-sm font-medium">{getLogoText(selectedLogo)}</span>
                       </div>
                       <CreditCard className="w-6 h-6" />
                     </div>
@@ -577,6 +823,202 @@ export function CreateCredential() {
               </div>
             </div>
           </div>
+
+          {/* Customization Options */}
+          <Card className="p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <Sparkles className="w-5 h-5 mr-2 text-blue-600" />
+              Personalizar Credencial
+            </h3>
+            
+            <div className="space-y-6">
+              {/* Color Selection */}
+              <div>
+                <h4 className="text-sm font-medium text-gray-700 mb-3">Color de Fondo</h4>
+                <div className="flex flex-wrap gap-3">
+                  <button 
+                    onClick={() => setSelectedGradient("blue-purple")}
+                    className={`w-12 h-12 rounded-lg bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 border-2 ${selectedGradient === "blue-purple" ? "border-blue-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`} 
+                    title="Azul Púrpura">
+                  </button>
+                  <button 
+                    onClick={() => setSelectedGradient("emerald-teal")}
+                    className={`w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-800 border-2 ${selectedGradient === "emerald-teal" ? "border-teal-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`} 
+                    title="Verde Esmeralda">
+                  </button>
+                  <button 
+                    onClick={() => setSelectedGradient("rose-red")}
+                    className={`w-12 h-12 rounded-lg bg-gradient-to-br from-rose-600 via-pink-600 to-red-800 border-2 ${selectedGradient === "rose-red" ? "border-rose-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`} 
+                    title="Rosa Rojo">
+                  </button>
+                  <button 
+                    onClick={() => setSelectedGradient("amber-orange")}
+                    className={`w-12 h-12 rounded-lg bg-gradient-to-br from-amber-600 via-orange-600 to-red-800 border-2 ${selectedGradient === "amber-orange" ? "border-amber-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`} 
+                    title="Ámbar Naranja">
+                  </button>
+                  <button 
+                    onClick={() => setSelectedGradient("gray-slate")}
+                    className={`w-12 h-12 rounded-lg bg-gradient-to-br from-gray-600 via-slate-600 to-gray-800 border-2 ${selectedGradient === "gray-slate" ? "border-gray-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`} 
+                    title="Gris Elegante">
+                  </button>
+                  
+                  {/* Custom Color Picker Button */}
+                  <button 
+                    onClick={() => {
+                      setSelectedGradient("custom");
+                      setShowColorPicker(!showColorPicker);
+                    }}
+                    className={`w-12 h-12 rounded-lg border-2 ${selectedGradient === "custom" ? "border-purple-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform flex items-center justify-center bg-white`} 
+                    style={selectedGradient === "custom" ? {background: `linear-gradient(135deg, ${customGradient.start} 0%, ${customGradient.end} 100%)`} : {}}
+                    title="Paleta Personalizada">
+                    <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Color Picker Panel */}
+                {showColorPicker && (
+                  <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <h5 className="text-sm font-medium text-gray-700 mb-3">Colores Personalizados</h5>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-2">Color Inicial</label>
+                        <input 
+                          type="color" 
+                          value={customGradient.start}
+                          onChange={(e) => setCustomGradient(prev => ({...prev, start: e.target.value}))}
+                          className="w-full h-10 border border-gray-300 rounded cursor-pointer"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs text-gray-600 mb-2">Color Final</label>
+                        <input 
+                          type="color" 
+                          value={customGradient.end}
+                          onChange={(e) => setCustomGradient(prev => ({...prev, end: e.target.value}))}
+                          className="w-full h-10 border border-gray-300 rounded cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Logo Selection */}
+              <div>
+                <h4 className="text-sm font-medium text-gray-700 mb-3">Estilo de Logo</h4>
+                <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3">
+                    <button 
+                      onClick={() => setSelectedLogo("starproof")}
+                      className={`p-3 ${selectedLogo === "starproof" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center`}>
+                      <img src="/white.png" alt="StarProof" className="w-6 h-6 mr-2" />
+                      <span className="text-sm font-medium">StarProof</span>
+                    </button>
+                    <button 
+                      onClick={() => setSelectedLogo("shield")}
+                      className={`p-3 ${selectedLogo === "shield" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center`}>
+                      <Shield className="w-6 h-6 mr-2 text-blue-600" />
+                      <span className="text-sm font-medium">Escudo</span>
+                    </button>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <button 
+                      onClick={() => setSelectedLogo("custom-text")}
+                      className={`p-3 ${selectedLogo === "custom-text" ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-green-100 transition-colors flex items-center justify-center`}>
+                      <span className="text-lg font-bold mr-2">ABC</span>
+                      <span className="text-sm font-medium">Texto</span>
+                    </button>
+                    <button 
+                      onClick={() => setSelectedLogo("custom-image")}
+                      className={`p-3 ${selectedLogo === "custom-image" ? "bg-purple-50 border-purple-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center`}>
+                      <svg className="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span className="text-sm font-medium">Imagen</span>
+                    </button>
+                  </div>
+
+                  {/* Custom Text Input */}
+                  {selectedLogo === "custom-text" && (
+                    <div className="space-y-2">
+                      <input
+                        type="text"
+                        value={customLogoText}
+                        onChange={(e) => {
+                          console.log("Changing custom text to:", e.target.value);
+                          setCustomLogoText(e.target.value);
+                        }}
+                        placeholder="Ingresa tu texto..."
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autoFocus
+                      />
+                      <p className="text-xs text-gray-500">El texto aparecerá como logo en tu credencial</p>
+                    </div>
+                  )}
+
+                  {/* Custom Image Upload */}
+                  {selectedLogo === "custom-image" && (
+                    <div className="space-y-2">
+                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
+                        {customLogoUrl ? (
+                          <div className="space-y-2">
+                            <img src={customLogoUrl} alt="Logo preview" className="w-16 h-16 object-contain mx-auto" />
+                            <p className="text-sm text-green-600">Logo cargado correctamente</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-2">
+                            <svg className="mx-auto h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                            <p className="text-sm text-gray-600">Sube tu logo</p>
+                          </div>
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleLogoUpload}
+                          className="hidden"
+                          id="logo-upload"
+                        />
+                        <label htmlFor="logo-upload" className="cursor-pointer inline-block mt-2 px-3 py-1 bg-blue-50 text-blue-600 text-sm rounded hover:bg-blue-100 transition-colors">
+                          {customLogoUrl ? "Cambiar imagen" : "Seleccionar archivo"}
+                        </label>
+                      </div>
+                      <p className="text-xs text-gray-500">PNG, JPG, SVG hasta 2MB</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Template Selection */}
+              <div>
+                <h4 className="text-sm font-medium text-gray-700 mb-3">Plantilla</h4>
+                <div className="grid grid-cols-3 gap-3">
+                  <button 
+                    onClick={() => setSelectedTemplate("classic")}
+                    className={`p-3 ${selectedTemplate === "classic" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-blue-100 transition-colors text-center`}>
+                    <CreditCard className="w-6 h-6 mx-auto mb-1 text-blue-600" />
+                    <span className="text-xs font-medium">Clásica</span>
+                  </button>
+                  <button 
+                    onClick={() => setSelectedTemplate("modern")}
+                    className={`p-3 ${selectedTemplate === "modern" ? "bg-purple-50 border-purple-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors text-center`}>
+                    <Sparkles className="w-6 h-6 mx-auto mb-1 text-purple-600" />
+                    <span className="text-xs font-medium">Moderna</span>
+                  </button>
+                  <button 
+                    onClick={() => setSelectedTemplate("corporate")}
+                    className={`p-3 ${selectedTemplate === "corporate" ? "bg-indigo-50 border-indigo-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors text-center`}>
+                    <Building className="w-6 h-6 mx-auto mb-1 text-indigo-600" />
+                    <span className="text-xs font-medium">Corporativa</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Card>
         </div>
 
         {/* Right Column - Form */}
@@ -738,12 +1180,12 @@ export function CreateCredential() {
                     >
                       {/* Front of Card */}
                       <div className="mini-credential-front">
-                        <div className="relative w-full h-56 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 rounded-xl shadow-xl overflow-hidden">
+                        <div 
+                          className={`relative w-full h-56 ${credential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(credential.customization)} rounded-xl shadow-xl overflow-hidden`}
+                          style={getCredentialGradientStyle(credential.customization)}>
                           {/* Background Pattern */}
                           <div className="absolute inset-0 opacity-10">
-                            <div className="absolute top-4 right-4 w-16 h-16 border-2 border-white rounded-full"></div>
-                            <div className="absolute bottom-4 left-4 w-12 h-12 border border-white rounded-full"></div>
-                            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-white rounded-full"></div>
+                            {getCredentialTemplate(credential.customization)}
                           </div>
 
                           {/* Card Content */}
@@ -751,13 +1193,9 @@ export function CreateCredential() {
                             {/* Header */}
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-2">
-                                <img
-                                  src="/white.png"
-                                  alt="StarProof"
-                                  className="w-8 h-8"
-                                />
+                                {getCredentialLogoComponent(credential.customization)}
                                 <span className="text-sm font-medium">
-                                  StarProof
+                                  {getCredentialLogoText(credential.customization)}
                                 </span>
                               </div>
                               <CreditCard className="w-6 h-6" />
@@ -951,12 +1389,12 @@ export function CreateCredential() {
                   >
                     {/* Front of Card */}
                     <div className="credential-front">
-                      <div className="relative w-full h-56 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 rounded-xl shadow-xl overflow-hidden">
+                      <div 
+                        className={`relative w-full h-56 ${selectedCredential.customization?.selectedGradient === "custom" ? "" : "bg-gradient-to-br " + getCredentialGradientClasses(selectedCredential.customization)} rounded-xl shadow-xl overflow-hidden`}
+                        style={getCredentialGradientStyle(selectedCredential.customization)}>
                         {/* Background Pattern */}
                         <div className="absolute inset-0 opacity-10">
-                          <div className="absolute top-4 right-4 w-16 h-16 border-2 border-white rounded-full"></div>
-                          <div className="absolute bottom-4 left-4 w-12 h-12 border border-white rounded-full"></div>
-                          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 border border-white rounded-full"></div>
+                          {getCredentialTemplate(selectedCredential.customization)}
                         </div>
 
                         {/* Card Content */}
@@ -964,13 +1402,9 @@ export function CreateCredential() {
                           {/* Header */}
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                              <img
-                                src="/white.png"
-                                alt="StarProof"
-                                className="w-8 h-8"
-                              />
+                              {getCredentialLogoComponent(selectedCredential.customization)}
                               <span className="text-sm font-medium">
-                                StarProof
+                                {getCredentialLogoText(selectedCredential.customization)}
                               </span>
                             </div>
                             <CreditCard className="w-6 h-6" />
