@@ -12,12 +12,13 @@ import {
   LogOut, 
   Wallet,
   Menu,
-  X
+  X,
+  CreditCard
 } from 'lucide-react';
 
 interface SidebarProps {
-  activeSection: 'dashboard' | 'profile' | 'api-key';
-  onSectionChange: (section: 'dashboard' | 'profile' | 'api-key') => void;
+  activeSection: 'dashboard' | 'profile' | 'api-key' | 'credentials';
+  onSectionChange: (section: 'dashboard' | 'profile' | 'api-key' | 'credentials') => void;
 }
 
 export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
@@ -42,6 +43,12 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
       label: 'API Key',
       icon: Key,
       description: 'Generate & Manage'
+    },
+    {
+      id: 'credentials' as const,
+      label: 'Credentials',
+      icon: CreditCard,
+      description: 'Create & Issue'
     }
   ];
 

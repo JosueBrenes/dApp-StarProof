@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Generate a unique API key
-    const keyPrefix = 'spk_test_'; // Use test prefix for development
+    const keyPrefix = 'spk_test_'; // Use spk_test_ prefix as required
     const keyData = randomBytes(32).toString('hex');
     const apiKey = keyPrefix + keyData;
 
