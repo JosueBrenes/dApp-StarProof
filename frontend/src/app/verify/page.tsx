@@ -290,7 +290,7 @@ export default function VerifyPage() {
         {/* Footer */}
         <div className="text-center mt-8">
           <p className="text-gray-600 mb-4">
-            This credential was verified using StarProof's blockchain verification system
+            This credential was verified using StarProof&apos;s blockchain verification system
           </p>
           <Button onClick={() => window.location.href = '/'}>
             Create Your Own Credentials

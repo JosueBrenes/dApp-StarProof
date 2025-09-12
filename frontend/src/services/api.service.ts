@@ -6,21 +6,30 @@ export interface CredentialContract {
   description: string;
   issuedAt: string;
   expiresAt: string;
-  claims: Record<string, any>;
+  claims: Record<string, string | number | boolean>;
   schema?: string;
   contractAddress: string;
   transactionHash: string;
   verificationUrl: string;
+  qrCode?: string; // QR code data URL for local display
+  customization?: {
+    selectedGradient?: string;
+    customGradient?: { start: string; end: string };
+    selectedLogo?: string;
+    customLogoUrl?: string;
+    customLogoText?: string;
+    selectedTemplate?: string;
+  };
 }
 
 export interface CreateCredentialRequest {
   templateId?: string; // UUID del template, usaremos uno fijo para MVP
-  data?: Record<string, any>; // Datos específicos de la credencial
+  data?: Record<string, string | number | boolean>; // Datos específicos de la credencial
   holder: string;
   category: string;
   description: string;
   expiresAt: string;
-  claims?: Record<string, any>;
+  claims?: Record<string, string | number | boolean>;
   schema?: string;
   issuerWallet?: string; // Add wallet address of the issuer
 }

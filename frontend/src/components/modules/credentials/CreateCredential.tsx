@@ -6,17 +6,12 @@ import { Button } from "@/components/ui/button";
 import {
   CreditCard,
   Sparkles,
-  Calendar,
-  Tag,
   User,
   Building,
   Save,
   Eye,
   EyeOff,
   CheckCircle,
-  QrCode,
-  Lock,
-  Unlock,
   Shield,
   ExternalLink,
   AlertCircle,
@@ -60,7 +55,7 @@ export function CreateCredential() {
   );
   const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [selectedCredential, setSelectedCredential] = useState<any>(null);
+  const [selectedCredential, setSelectedCredential] = useState<CredentialContract | null>(null);
   const [detailCardFlipped, setDetailCardFlipped] = useState(false);
 
   // Customization states
@@ -193,7 +188,7 @@ export function CreateCredential() {
     });
   };
 
-  const openDetailModal = (credential: any) => {
+  const openDetailModal = (credential: CredentialContract) => {
     setSelectedCredential(credential);
     setDetailCardFlipped(false);
     setShowDetailModal(true);
@@ -308,7 +303,14 @@ export function CreateCredential() {
   };
 
   // Helper functions for credential list styling
-  const getCredentialGradientClasses = (customization: any): string => {
+  const getCredentialGradientClasses = (customization: {
+    selectedGradient?: string;
+    customGradient?: { start: string; end: string };
+    selectedLogo?: string;
+    customLogoUrl?: string;
+    customLogoText?: string;
+    selectedTemplate?: string;
+  } | null | undefined): string => {
     const gradient = customization?.selectedGradient || "blue-purple";
     switch (gradient) {
       case "emerald-teal":
@@ -325,7 +327,10 @@ export function CreateCredential() {
     }
   };
 
-  const getCredentialGradientStyle = (customization: any) => {
+  const getCredentialGradientStyle = (customization: {
+    selectedGradient?: string;
+    customGradient?: { start: string; end: string };
+  } | null | undefined) => {
     if (
       customization?.selectedGradient === "custom" &&
       customization?.customGradient
@@ -337,7 +342,11 @@ export function CreateCredential() {
     return {};
   };
 
-  const getCredentialLogoComponent = (customization: any) => {
+  const getCredentialLogoComponent = (customization: {
+    selectedLogo?: string;
+    customLogoUrl?: string;
+    customLogoText?: string;
+  } | null | undefined) => {
     const logo = customization?.selectedLogo || "starproof";
     switch (logo) {
       case "shield":
@@ -364,7 +373,10 @@ export function CreateCredential() {
     }
   };
 
-  const getCredentialLogoText = (customization: any) => {
+  const getCredentialLogoText = (customization: {
+    selectedLogo?: string;
+    customLogoText?: string;
+  } | null | undefined) => {
     // Always show custom text if it exists and is not empty, regardless of logo type
     if (
       customization?.customLogoText &&
@@ -388,7 +400,9 @@ export function CreateCredential() {
     }
   };
 
-  const getCredentialTemplate = (customization: any) => {
+  const getCredentialTemplate = (customization: {
+    selectedTemplate?: string;
+  } | null | undefined) => {
     const template = customization?.selectedTemplate || "classic";
     switch (template) {
       case "modern":
@@ -1313,7 +1327,7 @@ export function CreateCredential() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {userCredentials.map((credential, index) => {
+            {userCredentials.map((credential) => {
               const isFlipped = flippedCards.has(credential.id);
               return (
                 <div key={credential.id} className="group">
