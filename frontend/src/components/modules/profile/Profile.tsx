@@ -44,20 +44,20 @@ export function Profile() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-          <p className="text-gray-600 mt-1">Your wallet information and connection details</p>
+          <h1 className="text-3xl font-bold text-foreground">Profile</h1>
+          <p className="text-muted-foreground mt-1">Your wallet information and connection details</p>
         </div>
 
-        <Card className="p-8 text-center">
+        <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 text-center">
           <div className="max-w-md mx-auto">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Wallet className="w-8 h-8 text-gray-400" />
+            <div className="w-16 h-16 bg-white/5 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
+              <Wallet className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">No Wallet Connected</h2>
-            <p className="text-gray-600 mb-6">
+            <h2 className="text-xl font-semibold text-foreground mb-2">No Wallet Connected</h2>
+            <p className="text-muted-foreground mb-6">
               Connect your Stellar wallet to view your profile information and manage your account.
             </p>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all">
               Connect Wallet
             </Button>
           </div>
@@ -70,43 +70,43 @@ export function Profile() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Profile</h1>
-        <p className="text-gray-600 mt-1">Your wallet information and connection details</p>
+        <h1 className="text-3xl font-bold text-foreground">Profile</h1>
+        <p className="text-muted-foreground mt-1">Your wallet information and connection details</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main Profile Card */}
-        <div className="lg:col-span-2 space-y-6">
-          <Card className="p-6">
-            <div className="flex items-start space-x-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6">
               <Avatar className="h-20 w-20">
-                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white text-xl font-bold">
+                <AvatarFallback className="bg-gradient-to-br from-[#1B6BFF] to-[#8F43FF] text-white text-xl font-bold">
                   {walletAddress?.slice(0, 2).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               
               <div className="flex-1 space-y-4">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Stellar Wallet</h2>
-                  <p className="text-gray-600">Connected to StarProof dApp</p>
+                  <h2 className="text-2xl font-bold text-foreground">Stellar Wallet</h2>
+                  <p className="text-muted-foreground">Connected to StarProof dApp</p>
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  <Badge className="bg-green-100 text-green-700">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                  <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">
+                    <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
                     Connected
                   </Badge>
-                  <Badge variant="outline">Testnet</Badge>
-                  <Badge variant="outline">Verified</Badge>
+                  <Badge variant="outline" className="border-white/20 text-muted-foreground backdrop-blur-sm rounded-2xl">Testnet</Badge>
+                  <Badge variant="outline" className="border-white/20 text-muted-foreground backdrop-blur-sm rounded-2xl">Verified</Badge>
                 </div>
               </div>
             </div>
           </Card>
 
           {/* Wallet Details */}
-          <Card className="p-6">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+              <h3 className="text-lg font-semibold text-foreground flex items-center">
                 <Wallet className="w-5 h-5 mr-2" />
                 Wallet Details
               </h3>
@@ -115,12 +115,12 @@ export function Profile() {
             <div className="space-y-6">
               {/* Public Key */}
               <div>
-                <label className="text-sm font-medium text-gray-700 flex items-center mb-2">
+                <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
                   <Info className="w-4 h-4 mr-1" />
                   Public Key
                 </label>
-                <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border">
-                  <code className="flex-1 text-sm text-gray-900 font-mono break-all">
+                <div className="flex items-center space-x-3 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
+                  <code className="flex-1 text-sm text-foreground font-mono break-all">
                     {walletAddress}
                   </code>
                   <Button
@@ -132,7 +132,7 @@ export function Profile() {
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground/70 mt-1">
                   Your Stellar public key used for identification and transactions
                 </p>
               </div>
@@ -140,26 +140,26 @@ export function Profile() {
               <Separator />
 
               {/* Network Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 flex items-center mb-2">
+                  <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
                     <Globe className="w-4 h-4 mr-1" />
                     Network
                   </label>
-                  <div className="p-3 bg-orange-50 rounded-lg border border-orange-200">
-                    <p className="text-sm font-medium text-orange-800">{walletInfo.network}</p>
-                    <p className="text-xs text-orange-600 mt-1">Development environment</p>
+                  <div className="p-3 bg-orange-400/10 backdrop-blur-sm rounded-lg border border-orange-400/20">
+                    <p className="text-sm font-medium text-orange-400">{walletInfo.network}</p>
+                    <p className="text-xs text-orange-400/70 mt-1">Development environment</p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 flex items-center mb-2">
+                  <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
                     <Shield className="w-4 h-4 mr-1" />
                     Security
                   </label>
-                  <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                    <p className="text-sm font-medium text-green-800">Signature Auth</p>
-                    <p className="text-xs text-green-600 mt-1">Wallet-signed authentication</p>
+                  <div className="p-3 bg-green-400/10 backdrop-blur-sm rounded-lg border border-green-400/20">
+                    <p className="text-sm font-medium text-green-400">Signature Auth</p>
+                    <p className="text-xs text-green-400/70 mt-1">Wallet-signed authentication</p>
                   </div>
                 </div>
               </div>
@@ -168,14 +168,14 @@ export function Profile() {
 
               {/* Technical Details */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-3 block">
+                <label className="text-sm font-medium text-muted-foreground mb-3 block">
                   Network Configuration
                 </label>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                    <span className="text-sm text-gray-600">Horizon URL</span>
+                  <div className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
+                    <span className="text-sm text-muted-foreground">Horizon URL</span>
                     <div className="flex items-center space-x-2">
-                      <code className="text-xs text-gray-800 bg-white px-2 py-1 rounded">
+                      <code className="text-xs text-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10">
                         horizon-testnet.stellar.org
                       </code>
                       <Button
@@ -188,9 +188,9 @@ export function Profile() {
                     </div>
                   </div>
                   
-                  <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                    <span className="text-sm text-gray-600">Network Passphrase</span>
-                    <code className="text-xs text-gray-800 bg-white px-2 py-1 rounded max-w-xs truncate">
+                  <div className="flex justify-between items-center p-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
+                    <span className="text-sm text-muted-foreground">Network Passphrase</span>
+                    <code className="text-xs text-foreground bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10 max-w-xs truncate">
                       {walletInfo.passphrase}
                     </code>
                   </div>
@@ -201,48 +201,48 @@ export function Profile() {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Connection Status */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 sm:p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
               <Clock className="w-5 h-5 mr-2" />
               Connection Status
             </h3>
             
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Status</span>
-                <Badge className="bg-green-100 text-green-700">Active</Badge>
+                <span className="text-sm text-muted-foreground">Status</span>
+                <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">Active</Badge>
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Connected Since</span>
-                <span className="text-sm text-gray-900">Just now</span>
+                <span className="text-sm text-muted-foreground">Connected Since</span>
+                <span className="text-sm text-foreground">Just now</span>
               </div>
               
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Network</span>
-                <Badge variant="outline">Testnet</Badge>
+                <span className="text-sm text-muted-foreground">Network</span>
+                <Badge variant="outline" className="border-white/20 text-muted-foreground backdrop-blur-sm rounded-2xl">Testnet</Badge>
               </div>
             </div>
           </Card>
 
           {/* Quick Actions */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Quick Actions</h3>
             
             <div className="space-y-3">
-              <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
                 <Copy className="w-4 h-4 mr-2" />
                 Copy Address
               </Button>
               
-              <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
                 <ExternalLink className="w-4 h-4 mr-2" />
                 View on Explorer
               </Button>
               
-              <Button variant="outline" className="w-full justify-start text-red-600 border-red-200 hover:bg-red-50">
+              <Button variant="outline" className="w-full justify-start text-red-400 border-red-400/30 hover:bg-red-400/10 backdrop-blur-sm rounded-2xl">
                 <Wallet className="w-4 h-4 mr-2" />
                 Disconnect Wallet
               </Button>
@@ -250,15 +250,15 @@ export function Profile() {
           </Card>
 
           {/* Help & Support */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Need Help?</h3>
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Need Help?</h3>
             
             <div className="space-y-3">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Having issues with your wallet connection or need assistance?
               </p>
               
-              <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
                 <Info className="w-4 h-4 mr-2" />
                 View Documentation
               </Button>

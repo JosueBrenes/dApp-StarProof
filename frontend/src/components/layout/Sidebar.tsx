@@ -3,14 +3,11 @@
 import React, { useState } from 'react';
 import { useWallet } from '@/components/modules/auth/hooks/wallet.hook';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { 
   LayoutDashboard, 
   User, 
   Key, 
   LogOut, 
-  Wallet,
   Menu,
   X,
   CreditCard
@@ -22,7 +19,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
-  const { isConnected, walletAddress, handleDisconnect } = useWallet();
+  const { handleDisconnect } = useWallet();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const menuItems = [
@@ -52,21 +49,18 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
     }
   ];
 
-  const formatAddress = (address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-6)}`;
-  };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-white border-r border-gray-200">
+    <div className="flex flex-col h-full bg-background/80 backdrop-blur-xl border-r border-white/10">
       {/* Header */}
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-white/10">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 flex items-center justify-center">
             <img src="/logo.png" alt="StarProof Logo" className="w-10 h-10" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gray-900">StarProof</h1>
-            <p className="text-sm text-gray-500">dApp Dashboard</p>
+            <h1 className="text-xl font-bold text-foreground">StarProof</h1>
+            <p className="text-sm text-muted-foreground">dApp Dashboard</p>
           </div>
         </div>
       </div>
@@ -85,16 +79,16 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
                 onSectionChange(item.id);
                 setIsMobileOpen(false);
               }}
-              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
+              className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl transition-all duration-200 ${
                 isActive 
-                  ? 'bg-blue-50 text-blue-600 border border-blue-200' 
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  ? 'bg-gradient-to-r from-[#1B6BFF]/20 to-[#8F43FF]/20 text-foreground border border-[#1B6BFF]/30 shadow-lg backdrop-blur-sm' 
+                  : 'text-muted-foreground hover:bg-white/5 hover:text-foreground backdrop-blur-sm'
               }`}
             >
               <Icon className="w-5 h-5" />
               <div className="flex-1 text-left">
                 <p className="text-sm font-medium">{item.label}</p>
-                <p className="text-xs text-gray-500">{item.description}</p>
+                <p className="text-xs opacity-70">{item.description}</p>
               </div>
             </button>
           );
@@ -102,11 +96,11 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-gray-200">
+      <div className="p-4 border-t border-white/10">
         <Button
           variant="ghost"
           onClick={handleDisconnect}
-          className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+          className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-500/10 backdrop-blur-sm border border-red-500/20 rounded-2xl"
         >
           <LogOut className="w-4 h-4 mr-2" />
           Disconnect Wallet
@@ -123,7 +117,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
           variant="outline"
           size="sm"
           onClick={() => setIsMobileOpen(!isMobileOpen)}
-          className="bg-white shadow-md"
+          className="bg-background/80 backdrop-blur-xl border-white/20 text-foreground hover:bg-background/90 shadow-xl rounded-2xl"
         >
           {isMobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
         </Button>
@@ -137,7 +131,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
       {/* Mobile Sidebar Overlay */}
       {isMobileOpen && (
         <div className="lg:hidden fixed inset-0 z-40 flex">
-          <div className="fixed inset-0 bg-black opacity-50" onClick={() => setIsMobileOpen(false)} />
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMobileOpen(false)} />
           <div className="relative w-80 h-full">
             {sidebarContent}
           </div>

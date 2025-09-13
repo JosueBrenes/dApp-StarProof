@@ -16,7 +16,6 @@ import {
   RefreshCw,
   Trash2,
   Shield,
-  AlertCircle,
   CheckCircle,
   Download,
   RotateCcw,
@@ -27,11 +26,9 @@ export function ApiKey() {
   const { isConnected } = useWallet();
   const { 
     userProfile, 
-    isLoadingUser, 
     generateApiKey, 
     regenerateApiKey, 
-    deleteApiKey, 
-    refreshUserProfile 
+    deleteApiKey
   } = useWalletContext();
   
   const [copied, setCopied] = useState(false);
@@ -132,27 +129,27 @@ STARPROOF_API_URL=${apiUrl}
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             API Key Management
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-muted-foreground mt-1">
             Generate and manage your StarProof API keys
           </p>
         </div>
 
-        <Card className="p-8 text-center">
+        <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 text-center">
           <div className="max-w-md mx-auto">
-            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Key className="w-8 h-8 text-gray-400" />
+            <div className="w-16 h-16 bg-white/5 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10">
+              <Key className="w-8 h-8 text-muted-foreground" />
             </div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            <h2 className="text-xl font-semibold text-foreground mb-2">
               Wallet Connection Required
             </h2>
-            <p className="text-gray-600 mb-6">
+            <p className="text-muted-foreground mb-6">
               You need to connect your Stellar wallet to generate and manage API
               keys for StarProof services.
             </p>
-            <Button className="bg-blue-600 hover:bg-blue-700">
+            <Button className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all">
               Connect Wallet
             </Button>
           </div>
@@ -166,30 +163,30 @@ STARPROOF_API_URL=${apiUrl}
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             API Key Management
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-muted-foreground mt-1">
             Generate and manage your StarProof API keys
           </p>
         </div>
-        <Badge variant="outline" className="text-blue-700 border-blue-200">
+        <Badge variant="outline" className="text-[#1B6BFF] border-[#1B6BFF]/30 bg-[#1B6BFF]/10 backdrop-blur-sm rounded-2xl">
           <Shield className="w-3 h-3 mr-1" />
           Secure
         </Badge>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main API Key Card */}
         <div className="lg:col-span-2 space-y-6">
-          <Card className="p-6">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 flex items-center">
+              <h2 className="text-xl font-semibold text-foreground flex items-center">
                 <Key className="w-5 h-5 mr-2" />
                 Your API Key
               </h2>
               {hasApiKey && (
-                <Badge className="bg-green-100 text-green-700">
+                <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">
                   <CheckCircle className="w-3 h-3 mr-1" />
                   Active
                 </Badge>
@@ -198,20 +195,20 @@ STARPROOF_API_URL=${apiUrl}
 
             {!hasApiKey ? (
               <div className="text-center py-8">
-                <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Key className="w-8 h-8 text-blue-500" />
+                <div className="w-16 h-16 bg-[#1B6BFF]/10 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-[#1B6BFF]/20">
+                  <Key className="w-8 h-8 text-[#1B6BFF]" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
                   No API Key Generated
                 </h3>
-                <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                <p className="text-muted-foreground mb-6 max-w-md mx-auto">
                   Generate a secure API key to access StarProof services. The
                   key will be authenticated with your wallet signature.
                 </p>
                 <Button
                   onClick={handleGenerateApiKey}
                   disabled={isGenerating}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
                 >
                   {isGenerating ? (
                     <>
@@ -230,11 +227,11 @@ STARPROOF_API_URL=${apiUrl}
               <div className="space-y-6">
                 {/* API Key Display */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">
+                  <label className="text-sm font-medium text-muted-foreground mb-2 block">
                     API Key
                   </label>
-                  <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border">
-                    <code className="flex-1 text-sm font-mono text-gray-900 min-w-0 break-all">
+                  <div className="flex items-center space-x-3 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10">
+                    <code className="flex-1 text-sm font-mono text-foreground min-w-0 break-all">
                       {showKey ? apiKeyToShow : "•".repeat(32)}
                     </code>
                     <div className="flex items-center space-x-2 flex-shrink-0">
@@ -262,7 +259,7 @@ STARPROOF_API_URL=${apiUrl}
                       </Button>
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-muted-foreground/70 mt-1">
                     Keep your API key secure and never share it publicly
                   </p>
                 </div>
@@ -270,19 +267,19 @@ STARPROOF_API_URL=${apiUrl}
                 {/* Key Information */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">
+                    <label className="text-sm font-medium text-muted-foreground mb-1 block">
                       Created At
                     </label>
-                    <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-foreground bg-white/5 backdrop-blur-sm p-3 rounded-lg border border-white/10">
                       {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleString() : 'Just created'}
                     </p>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">
+                    <label className="text-sm font-medium text-muted-foreground mb-1 block">
                       Status
                     </label>
-                    <div className="bg-gray-50 p-3 rounded-lg">
-                      <Badge className="bg-green-100 text-green-700">
+                    <div className="bg-white/5 backdrop-blur-sm p-3 rounded-lg border border-white/10">
+                      <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">
                         <CheckCircle className="w-3 h-3 mr-1" />
                         Active & Valid
                       </Badge>
@@ -293,12 +290,12 @@ STARPROOF_API_URL=${apiUrl}
                 <Separator />
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3">
                   <Button
                     onClick={handleRegenerateApiKey}
                     disabled={isRegenerating}
                     variant="outline"
-                    className="border-blue-200 text-blue-600 hover:bg-blue-50"
+                    className="border-[#1B6BFF]/30 text-[#1B6BFF] hover:bg-[#1B6BFF]/10 backdrop-blur-sm rounded-2xl"
                   >
                     {isRegenerating ? (
                       <>
@@ -317,7 +314,7 @@ STARPROOF_API_URL=${apiUrl}
                     onClick={handleDeleteApiKey}
                     disabled={isDeleting}
                     variant="outline"
-                    className="border-red-200 text-red-600 hover:bg-red-50"
+                    className="border-red-400/30 text-red-400 hover:bg-red-400/10 backdrop-blur-sm rounded-2xl"
                   >
                     {isDeleting ? (
                       <>
@@ -332,7 +329,7 @@ STARPROOF_API_URL=${apiUrl}
                     )}
                   </Button>
 
-                  <Button onClick={downloadEnvFile} variant="outline">
+                  <Button onClick={downloadEnvFile} variant="outline" className="border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
                     <Download className="w-4 h-4 mr-2" />
                     Download .env
                   </Button>
@@ -341,12 +338,12 @@ STARPROOF_API_URL=${apiUrl}
             )}
 
             {generatedKey && (
-              <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg">
+              <div className="mt-4 p-4 bg-green-400/10 backdrop-blur-sm border border-green-400/20 rounded-lg">
                 <div className="flex items-start space-x-3">
-                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-sm font-medium text-green-800">Success</h4>
-                    <p className="text-sm text-green-700 mt-1">
+                    <h4 className="text-sm font-medium text-green-400">Success</h4>
+                    <p className="text-sm text-green-400/80 mt-1">
                       Your API key has been generated successfully. Make sure to copy it before navigating away.
                     </p>
                   </div>
@@ -359,40 +356,40 @@ STARPROOF_API_URL=${apiUrl}
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Security Info */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
               <Shield className="w-5 h-5 mr-2" />
               Security Information
             </h3>
 
             <div className="space-y-4 text-sm">
               <div className="flex items-start space-x-3">
-                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-gray-900">
+                  <p className="font-medium text-foreground">
                     Wallet Authenticated
                   </p>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground">
                     Keys are generated using your wallet signature
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
-                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-gray-900">Locally Stored</p>
-                  <p className="text-gray-600">
+                  <p className="font-medium text-foreground">Locally Stored</p>
+                  <p className="text-muted-foreground">
                     Keys are stored in your browser only
                   </p>
                 </div>
               </div>
 
               <div className="flex items-start space-x-3">
-                <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-gray-900">Revocable</p>
-                  <p className="text-gray-600">
+                  <p className="font-medium text-foreground">Revocable</p>
+                  <p className="text-muted-foreground">
                     You can clear and regenerate keys anytime
                   </p>
                 </div>
@@ -401,27 +398,27 @@ STARPROOF_API_URL=${apiUrl}
           </Card>
 
           {/* API Status */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">
               API Status
             </h3>
 
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Service</span>
-                <Badge className="bg-green-100 text-green-700">Online</Badge>
+                <span className="text-sm text-muted-foreground">Service</span>
+                <Badge className="bg-green-400/20 text-green-400 border-green-400/30 backdrop-blur-sm rounded-2xl">Online</Badge>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Endpoint</span>
-                <code className="text-xs bg-gray-100 px-2 py-1 rounded">
+                <span className="text-sm text-muted-foreground">Endpoint</span>
+                <code className="text-xs bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10 text-foreground">
                   {process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace(/^https?:\/\//, '').replace(/\/v1$/, '') : 'localhost:8080'}
                 </code>
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Version</span>
-                <code className="text-xs bg-gray-100 px-2 py-1 rounded">
+                <span className="text-sm text-muted-foreground">Version</span>
+                <code className="text-xs bg-white/5 backdrop-blur-sm px-2 py-1 rounded border border-white/10 text-foreground">
                   v1
                 </code>
               </div>
@@ -429,18 +426,18 @@ STARPROOF_API_URL=${apiUrl}
           </Card>
 
           {/* Help */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4">
               Need Help?
             </h3>
 
             <div className="space-y-3">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Check out our documentation for detailed API usage examples and
                 integration guides.
               </p>
 
-              <Button variant="outline" className="w-full justify-start">
+              <Button variant="outline" className="w-full justify-start border-white/20 text-foreground hover:bg-white/5 backdrop-blur-sm rounded-2xl">
                 View Documentation
               </Button>
             </div>
