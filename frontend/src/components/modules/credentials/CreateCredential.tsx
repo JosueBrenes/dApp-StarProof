@@ -617,24 +617,24 @@ export function CreateCredential() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             Create Credential
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-muted-foreground mt-1">
             Design and issue new digital credentials
           </p>
         </div>
 
         {/* API Key Required Notice */}
         <div className="max-w-2xl mx-auto">
-          <Card className="p-6 border-amber-200 bg-amber-50">
+          <Card className="bg-orange-400/10 backdrop-blur-sm border border-orange-400/20 rounded-2xl shadow-2xl p-6">
             <div className="flex items-center gap-3 mb-4">
-              <AlertCircle className="w-6 h-6 text-amber-600" />
+              <AlertCircle className="w-6 h-6 text-orange-400" />
               <div>
-                <h3 className="text-lg font-semibold text-amber-800">
+                <h3 className="text-lg font-semibold text-orange-400">
                   API Key Required
                 </h3>
-                <p className="text-amber-700">
+                <p className="text-orange-400/80">
                   You need to generate an API key before you can create
                   credentials.
                 </p>
@@ -642,7 +642,7 @@ export function CreateCredential() {
             </div>
             <Button
               onClick={() => (window.location.href = "/api-key-management")}
-              className="w-full mt-4"
+              className="w-full mt-4 bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
             >
               <Key className="w-4 h-4 mr-2" />
               Go to API Key Management
@@ -659,10 +659,10 @@ export function CreateCredential() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             Create Credential
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-muted-foreground mt-1">
             Design and issue new digital credentials
           </p>
         </div>
@@ -670,7 +670,7 @@ export function CreateCredential() {
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading user profile...</p>
+            <p className="text-muted-foreground">Loading user profile...</p>
           </div>
         </div>
       </div>
@@ -682,10 +682,10 @@ export function CreateCredential() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             Create Credential
           </h1>
-          <p className="text-gray-600 mt-1">
+          <p className="text-muted-foreground mt-1">
             Design and issue new digital credentials
           </p>
         </div>
@@ -704,7 +704,7 @@ export function CreateCredential() {
         {/* Left Column - Credential Preview */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold text-foreground">
               Credential Preview
             </h2>
             <Button
@@ -893,16 +893,16 @@ export function CreateCredential() {
           </div>
 
           {/* Customization Options */}
-          <Card className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-              <Sparkles className="w-5 h-5 mr-2 text-blue-600" />
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
+              <Sparkles className="w-5 h-5 mr-2 text-[#1B6BFF]" />
               Personalizar Credencial
             </h3>
 
             <div className="space-y-6">
               {/* Color Selection */}
               <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-3">
+                <h4 className="text-sm font-medium text-muted-foreground mb-3">
                   Color de Fondo
                 </h4>
                 <div className="flex flex-wrap gap-3">
@@ -949,7 +949,7 @@ export function CreateCredential() {
                     title="Paleta Personalizada"
                   >
                     <svg
-                      className="w-6 h-6 text-gray-600"
+                      className="w-6 h-6 text-muted-foreground"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -966,13 +966,13 @@ export function CreateCredential() {
 
                 {/* Color Picker Panel */}
                 {showColorPicker && (
-                  <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
-                    <h5 className="text-sm font-medium text-gray-700 mb-3">
+                  <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-white/5 backdrop-blur-sm">
+                    <h5 className="text-sm font-medium text-muted-foreground mb-3">
                       Colores Personalizados
                     </h5>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs text-gray-600 mb-2">
+                        <label className="block text-xs text-muted-foreground mb-2">
                           Color Inicial
                         </label>
                         <input
@@ -988,7 +988,7 @@ export function CreateCredential() {
                         />
                       </div>
                       <div>
-                        <label className="block text-xs text-gray-600 mb-2">
+                        <label className="block text-xs text-muted-foreground mb-2">
                           Color Final
                         </label>
                         <input
@@ -1010,14 +1010,14 @@ export function CreateCredential() {
 
               {/* Logo Selection */}
               <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-3">
+                <h4 className="text-sm font-medium text-muted-foreground mb-3">
                   Estilo de Logo
                 </h4>
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setSelectedLogo("starproof")}
-                      className={`p-3 ${selectedLogo === "starproof" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "starproof" ? "bg-blue-50 border-blue-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center`}
                     >
                       <img
                         src="/white.png"
@@ -1028,9 +1028,9 @@ export function CreateCredential() {
                     </button>
                     <button
                       onClick={() => setSelectedLogo("shield")}
-                      className={`p-3 ${selectedLogo === "shield" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "shield" ? "bg-blue-50 border-blue-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center`}
                     >
-                      <Shield className="w-6 h-6 mr-2 text-blue-600" />
+                      <Shield className="w-6 h-6 mr-2 text-[#1B6BFF]" />
                       <span className="text-sm font-medium">Escudo</span>
                     </button>
                   </div>
@@ -1038,14 +1038,14 @@ export function CreateCredential() {
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setSelectedLogo("custom-text")}
-                      className={`p-3 ${selectedLogo === "custom-text" ? "bg-green-50 border-green-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-green-100 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "custom-text" ? "bg-green-50 border-green-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-green-100 transition-colors flex items-center justify-center`}
                     >
                       <span className="text-lg font-bold mr-2">ABC</span>
                       <span className="text-sm font-medium">Texto</span>
                     </button>
                     <button
                       onClick={() => setSelectedLogo("custom-image")}
-                      className={`p-3 ${selectedLogo === "custom-image" ? "bg-purple-50 border-purple-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "custom-image" ? "bg-purple-50 border-purple-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center`}
                     >
                       <svg
                         className="w-6 h-6 mr-2 text-purple-600"
@@ -1098,7 +1098,7 @@ export function CreateCredential() {
                               alt="Logo preview"
                               className="w-16 h-16 object-contain mx-auto"
                             />
-                            <p className="text-sm text-green-600">
+                            <p className="text-sm text-green-400">
                               Logo cargado correctamente
                             </p>
                           </div>
@@ -1117,7 +1117,7 @@ export function CreateCredential() {
                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                               />
                             </svg>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-muted-foreground">
                               Sube tu logo
                             </p>
                           </div>
@@ -1131,7 +1131,7 @@ export function CreateCredential() {
                         />
                         <label
                           htmlFor="logo-upload"
-                          className="cursor-pointer inline-block mt-2 px-3 py-1 bg-blue-50 text-blue-600 text-sm rounded hover:bg-blue-100 transition-colors"
+                          className="cursor-pointer inline-block mt-2 px-3 py-1 bg-blue-50 text-[#1B6BFF] text-sm rounded hover:bg-blue-100 transition-colors"
                         >
                           {customLogoUrl
                             ? "Cambiar imagen"
@@ -1148,27 +1148,27 @@ export function CreateCredential() {
 
               {/* Template Selection */}
               <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-3">
+                <h4 className="text-sm font-medium text-muted-foreground mb-3">
                   Plantilla
                 </h4>
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setSelectedTemplate("classic")}
-                    className={`p-3 ${selectedTemplate === "classic" ? "bg-blue-50 border-blue-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-blue-100 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "classic" ? "bg-blue-50 border-blue-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-blue-100 transition-colors text-center`}
                   >
-                    <CreditCard className="w-6 h-6 mx-auto mb-1 text-blue-600" />
+                    <CreditCard className="w-6 h-6 mx-auto mb-1 text-[#1B6BFF]" />
                     <span className="text-xs font-medium">Clásica</span>
                   </button>
                   <button
                     onClick={() => setSelectedTemplate("modern")}
-                    className={`p-3 ${selectedTemplate === "modern" ? "bg-purple-50 border-purple-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "modern" ? "bg-purple-50 border-purple-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors text-center`}
                   >
                     <Sparkles className="w-6 h-6 mx-auto mb-1 text-purple-600" />
                     <span className="text-xs font-medium">Moderna</span>
                   </button>
                   <button
                     onClick={() => setSelectedTemplate("corporate")}
-                    className={`p-3 ${selectedTemplate === "corporate" ? "bg-indigo-50 border-indigo-200" : "bg-gray-50 border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "corporate" ? "bg-indigo-50 border-indigo-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors text-center`}
                   >
                     <Building className="w-6 h-6 mx-auto mb-1 text-indigo-600" />
                     <span className="text-xs font-medium">Corporativa</span>
@@ -1181,21 +1181,21 @@ export function CreateCredential() {
 
         {/* Right Column - Form */}
         <div className="space-y-6">
-          <h2 className="text-xl font-semibold text-gray-900">
+          <h2 className="text-xl font-semibold text-foreground">
             Credential Details
           </h2>
 
-          <Card className="p-6 space-y-6">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6 space-y-6">
             {/* Credential Information */}
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-gray-900 flex items-center">
-                <User className="w-5 h-5 mr-2" />
+              <h3 className="text-lg font-medium text-foreground flex items-center">
+                <User className="w-5 h-5 mr-2 text-[#1B6BFF]" />
                 Basic Information
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Holder Name *
                   </label>
                   <input
@@ -1209,7 +1209,7 @@ export function CreateCredential() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Issued By
                   </label>
                   <input
@@ -1224,7 +1224,7 @@ export function CreateCredential() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Category *
                   </label>
                   <select
@@ -1246,7 +1246,7 @@ export function CreateCredential() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Expires On *
                   </label>
                   <input
@@ -1260,7 +1260,7 @@ export function CreateCredential() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-muted-foreground mb-2">
                   Description
                 </label>
                 <textarea
@@ -1296,7 +1296,7 @@ export function CreateCredential() {
               <Button
                 onClick={handleCreateCredential}
                 disabled={isCreating || !userProfile?.has_api_key}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-gradient-to-r from-[#1B6BFF] to-[#8F43FF] text-white hover:from-[#1657CC] hover:to-[#7A36E0] rounded-2xl h-12 px-6 font-semibold shadow-lg transition-all"
               >
                 {isCreating ? (
                   <>
@@ -1319,7 +1319,7 @@ export function CreateCredential() {
       {userCredentials.length > 0 && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">My Credentials</h2>
+            <h2 className="text-2xl font-bold text-foreground">My Credentials</h2>
             <div className="text-sm text-gray-500">
               {userCredentials.length} credential
               {userCredentials.length !== 1 ? "s" : ""}
@@ -1493,7 +1493,7 @@ export function CreateCredential() {
             onClick={e => e.stopPropagation()}
           >
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              <h3 className="text-lg font-semibold text-foreground mb-4">
                 Scan QR Code to Verify
               </h3>
               <div className="flex justify-center mb-4">
@@ -1503,7 +1503,7 @@ export function CreateCredential() {
                   className="w-64 h-64 border rounded-lg"
                 />
               </div>
-              <p className="text-sm text-gray-600 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 Scan this QR code with any camera to verify the credential
                 authenticity
               </p>
@@ -1529,7 +1529,7 @@ export function CreateCredential() {
               {/* Left Column - Large Credential Card */}
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-gray-900">
+                  <h2 className="text-xl font-semibold text-foreground">
                     Credential Details
                   </h2>
                   <Button
@@ -1696,7 +1696,7 @@ export function CreateCredential() {
 
                 {/* QR Code Section */}
                 <div className="text-center">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  <h3 className="text-lg font-semibold text-foreground mb-4">
                     Verification QR Code
                   </h3>
                   <div className="inline-block p-4 bg-white rounded-lg shadow-lg border">
@@ -1706,7 +1706,7 @@ export function CreateCredential() {
                       className="w-48 h-48 mx-auto"
                     />
                   </div>
-                  <p className="text-sm text-gray-600 mt-3">
+                  <p className="text-sm text-muted-foreground mt-3">
                     Scan this QR code to verify the credential authenticity
                   </p>
                   <Button
@@ -1729,7 +1729,7 @@ export function CreateCredential() {
               {/* Right Column - Stellar Information */}
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-semibold text-gray-900">
+                  <h2 className="text-xl font-semibold text-foreground">
                     Blockchain Information
                   </h2>
                   <Button
@@ -1743,9 +1743,9 @@ export function CreateCredential() {
 
                 <div className="space-y-4">
                   {/* Credential ID */}
-                  <Card className="p-4">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <label className="text-sm font-medium text-gray-700">
+                      <label className="text-sm font-medium text-muted-foreground">
                         Credential ID
                       </label>
                       <Button
@@ -1759,15 +1759,15 @@ export function CreateCredential() {
                         <Copy className="w-4 h-4" />
                       </Button>
                     </div>
-                    <p className="text-sm text-gray-900 font-mono bg-gray-50 p-2 rounded">
+                    <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded">
                       {selectedCredential.id}
                     </p>
                   </Card>
 
                   {/* Contract Address */}
-                  <Card className="p-4">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <label className="text-sm font-medium text-gray-700">
+                      <label className="text-sm font-medium text-muted-foreground">
                         Contract Address
                       </label>
                       <Button
@@ -1783,15 +1783,15 @@ export function CreateCredential() {
                         <Copy className="w-4 h-4" />
                       </Button>
                     </div>
-                    <p className="text-sm text-gray-900 font-mono bg-gray-50 p-2 rounded">
+                    <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded">
                       {selectedCredential.contractAddress}
                     </p>
                   </Card>
 
                   {/* Transaction Hash */}
-                  <Card className="p-4">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <label className="text-sm font-medium text-gray-700">
+                      <label className="text-sm font-medium text-muted-foreground">
                         Transaction Hash
                       </label>
                       <div className="flex items-center space-x-2">
@@ -1821,15 +1821,15 @@ export function CreateCredential() {
                         </Button>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-900 font-mono bg-gray-50 p-2 rounded">
+                    <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded">
                       {selectedCredential.transactionHash}
                     </p>
                   </Card>
 
                   {/* Verification URL */}
-                  <Card className="p-4">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
                     <div className="flex items-center justify-between mb-2">
-                      <label className="text-sm font-medium text-gray-700">
+                      <label className="text-sm font-medium text-muted-foreground">
                         Verification URL
                       </label>
                       <Button
@@ -1845,14 +1845,14 @@ export function CreateCredential() {
                         <Copy className="w-4 h-4" />
                       </Button>
                     </div>
-                    <p className="text-sm text-gray-900 font-mono bg-gray-50 p-2 rounded break-all">
+                    <p className="text-sm text-foreground font-mono bg-white/5 backdrop-blur-sm p-2 rounded break-all">
                       {selectedCredential.verificationUrl}
                     </p>
                   </Card>
 
                   {/* Status */}
-                  <Card className="p-4">
-                    <label className="text-sm font-medium text-gray-700 mb-2 block">
+                  <Card className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4">
+                    <label className="text-sm font-medium text-muted-foreground mb-2 block">
                       Status
                     </label>
                     <div className="flex items-center space-x-2">
@@ -1861,7 +1861,7 @@ export function CreateCredential() {
                         Active & Verified
                       </span>
                     </div>
-                    <p className="text-xs text-gray-600 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       This credential is deployed on Stellar blockchain and
                       ready for verification
                     </p>
