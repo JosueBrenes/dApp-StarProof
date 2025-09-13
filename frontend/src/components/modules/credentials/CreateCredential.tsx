@@ -53,7 +53,6 @@ export function CreateCredential() {
   const [userCredentials, setUserCredentials] = useState<CredentialContract[]>(
     []
   );
-  const [flippedCards, setFlippedCards] = useState<Set<string>>(new Set());
   const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedCredential, setSelectedCredential] = useState<CredentialContract | null>(null);
   const [detailCardFlipped, setDetailCardFlipped] = useState(false);
@@ -176,38 +175,10 @@ export function CreateCredential() {
     }));
   };
 
-  const toggleCardFlip = (credentialId: string) => {
-    setFlippedCards(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(credentialId)) {
-        newSet.delete(credentialId);
-      } else {
-        newSet.add(credentialId);
-      }
-      return newSet;
-    });
-  };
-
   const openDetailModal = (credential: CredentialContract) => {
     setSelectedCredential(credential);
     setDetailCardFlipped(false);
     setShowDetailModal(true);
-  };
-
-  const formatIssuerName = (issuer: string): string => {
-    if (!issuer) {
-      return "StarProof";
-    }
-
-    // If it's a Stellar wallet address (starts with G and is 56 characters)
-    if (issuer.startsWith("G") && issuer.length === 56) {
-      // Return a shortened version with "StarProof" as the main name
-      const shortAddress = `${issuer.slice(0, 4)}...${issuer.slice(-4)}`;
-      return `StarProof (${shortAddress})`;
-    }
-
-    // If it's not a Stellar address, return as is or default
-    return issuer || "StarProof";
   };
 
   // Get gradient classes or style based on selection
@@ -680,12 +651,12 @@ export function CreateCredential() {
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
             Create Credential
           </h1>
-          <p className="text-muted-foreground mt-1">
+          <p className="text-muted-foreground mt-1 text-sm sm:text-base">
             Design and issue new digital credentials
           </p>
         </div>
@@ -700,7 +671,7 @@ export function CreateCredential() {
       </div>
 
       {/* Main Content Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
         {/* Left Column - Credential Preview */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
@@ -1328,7 +1299,7 @@ export function CreateCredential() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {userCredentials.map((credential) => {
-              const isFlipped = flippedCards.has(credential.id);
+              const isFlipped = false;
               return (
                 <div key={credential.id} className="group">
                   <div className="relative w-full max-w-md mx-auto cursor-pointer hover:scale-105 transition-transform">

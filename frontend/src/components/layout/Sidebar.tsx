@@ -3,14 +3,11 @@
 import React, { useState } from 'react';
 import { useWallet } from '@/components/modules/auth/hooks/wallet.hook';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { 
   LayoutDashboard, 
   User, 
   Key, 
   LogOut, 
-  Wallet,
   Menu,
   X,
   CreditCard
@@ -22,7 +19,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
-  const { isConnected, walletAddress, handleDisconnect } = useWallet();
+  const { handleDisconnect } = useWallet();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const menuItems = [
@@ -52,9 +49,6 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
     }
   ];
 
-  const formatAddress = (address: string) => {
-    return `${address.slice(0, 6)}...${address.slice(-6)}`;
-  };
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-background/80 backdrop-blur-xl border-r border-white/10">

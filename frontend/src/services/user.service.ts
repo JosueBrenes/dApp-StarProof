@@ -1,4 +1,4 @@
-import { supabase, type User, type UserProfile } from '@/lib/supabase'
+import { supabase, type UserProfile } from '@/lib/supabase'
 import { nanoid } from 'nanoid'
 
 // Re-export types for use in other modules

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { apiService, CredentialContract } from '@/services/api.service';
 
-export default function VerifyPage() {
+function VerifyPageContent() {
   const searchParams = useSearchParams();
   const [credential, setCredential] = useState<CredentialContract | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -298,5 +298,23 @@ export default function VerifyPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+        <Card className="p-8 max-w-md w-full text-center">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Loading...</h2>
+          <p className="text-gray-600">Preparing verification page...</p>
+        </Card>
+      </div>
+    }>
+      <VerifyPageContent />
+    </Suspense>
   );
 }

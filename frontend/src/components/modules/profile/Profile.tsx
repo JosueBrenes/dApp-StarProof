@@ -74,11 +74,11 @@ export function Profile() {
         <p className="text-muted-foreground mt-1">Your wallet information and connection details</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main Profile Card */}
-        <div className="lg:col-span-2 space-y-6">
-          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
-            <div className="flex items-start space-x-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-6">
               <Avatar className="h-20 w-20">
                 <AvatarFallback className="bg-gradient-to-br from-[#1B6BFF] to-[#8F43FF] text-white text-xl font-bold">
                   {walletAddress?.slice(0, 2).toUpperCase()}
@@ -140,7 +140,7 @@ export function Profile() {
               <Separator />
 
               {/* Network Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="text-sm font-medium text-muted-foreground flex items-center mb-2">
                     <Globe className="w-4 h-4 mr-1" />
@@ -201,9 +201,9 @@ export function Profile() {
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Connection Status */}
-          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
+          <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 sm:p-6">
             <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
               <Clock className="w-5 h-5 mr-2" />
               Connection Status

@@ -16,7 +16,6 @@ import {
   RefreshCw,
   Trash2,
   Shield,
-  AlertCircle,
   CheckCircle,
   Download,
   RotateCcw,
@@ -27,11 +26,9 @@ export function ApiKey() {
   const { isConnected } = useWallet();
   const { 
     userProfile, 
-    isLoadingUser, 
     generateApiKey, 
     regenerateApiKey, 
-    deleteApiKey, 
-    refreshUserProfile 
+    deleteApiKey
   } = useWalletContext();
   
   const [copied, setCopied] = useState(false);
@@ -179,7 +176,7 @@ STARPROOF_API_URL=${apiUrl}
         </Badge>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main API Key Card */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
@@ -293,7 +290,7 @@ STARPROOF_API_URL=${apiUrl}
                 <Separator />
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-col sm:flex-row flex-wrap gap-3">
                   <Button
                     onClick={handleRegenerateApiKey}
                     disabled={isRegenerating}

@@ -81,7 +81,6 @@ export class APIService {
     
     // For development, try to detect current environment
     if (typeof window !== 'undefined') {
-      const currentPort = window.location.port;
       const protocol = window.location.protocol;
       const hostname = window.location.hostname;
       
