@@ -54,7 +54,8 @@ export function CreateCredential() {
     []
   );
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [selectedCredential, setSelectedCredential] = useState<CredentialContract | null>(null);
+  const [selectedCredential, setSelectedCredential] =
+    useState<CredentialContract | null>(null);
   const [detailCardFlipped, setDetailCardFlipped] = useState(false);
 
   // Customization states
@@ -274,14 +275,19 @@ export function CreateCredential() {
   };
 
   // Helper functions for credential list styling
-  const getCredentialGradientClasses = (customization: {
-    selectedGradient?: string;
-    customGradient?: { start: string; end: string };
-    selectedLogo?: string;
-    customLogoUrl?: string;
-    customLogoText?: string;
-    selectedTemplate?: string;
-  } | null | undefined): string => {
+  const getCredentialGradientClasses = (
+    customization:
+      | {
+          selectedGradient?: string;
+          customGradient?: { start: string; end: string };
+          selectedLogo?: string;
+          customLogoUrl?: string;
+          customLogoText?: string;
+          selectedTemplate?: string;
+        }
+      | null
+      | undefined
+  ): string => {
     const gradient = customization?.selectedGradient || "blue-purple";
     switch (gradient) {
       case "emerald-teal":
@@ -298,10 +304,15 @@ export function CreateCredential() {
     }
   };
 
-  const getCredentialGradientStyle = (customization: {
-    selectedGradient?: string;
-    customGradient?: { start: string; end: string };
-  } | null | undefined) => {
+  const getCredentialGradientStyle = (
+    customization:
+      | {
+          selectedGradient?: string;
+          customGradient?: { start: string; end: string };
+        }
+      | null
+      | undefined
+  ) => {
     if (
       customization?.selectedGradient === "custom" &&
       customization?.customGradient
@@ -313,11 +324,16 @@ export function CreateCredential() {
     return {};
   };
 
-  const getCredentialLogoComponent = (customization: {
-    selectedLogo?: string;
-    customLogoUrl?: string;
-    customLogoText?: string;
-  } | null | undefined) => {
+  const getCredentialLogoComponent = (
+    customization:
+      | {
+          selectedLogo?: string;
+          customLogoUrl?: string;
+          customLogoText?: string;
+        }
+      | null
+      | undefined
+  ) => {
     const logo = customization?.selectedLogo || "starproof";
     switch (logo) {
       case "shield":
@@ -344,10 +360,15 @@ export function CreateCredential() {
     }
   };
 
-  const getCredentialLogoText = (customization: {
-    selectedLogo?: string;
-    customLogoText?: string;
-  } | null | undefined) => {
+  const getCredentialLogoText = (
+    customization:
+      | {
+          selectedLogo?: string;
+          customLogoText?: string;
+        }
+      | null
+      | undefined
+  ) => {
     // Always show custom text if it exists and is not empty, regardless of logo type
     if (
       customization?.customLogoText &&
@@ -371,9 +392,14 @@ export function CreateCredential() {
     }
   };
 
-  const getCredentialTemplate = (customization: {
-    selectedTemplate?: string;
-  } | null | undefined) => {
+  const getCredentialTemplate = (
+    customization:
+      | {
+          selectedTemplate?: string;
+        }
+      | null
+      | undefined
+  ) => {
     const template = customization?.selectedTemplate || "classic";
     switch (template) {
       case "modern":
@@ -867,40 +893,40 @@ export function CreateCredential() {
           <Card className="bg-background/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-6">
             <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center">
               <Sparkles className="w-5 h-5 mr-2 text-[#1B6BFF]" />
-              Personalizar Credencial
+              Customize Credential
             </h3>
 
             <div className="space-y-6">
               {/* Color Selection */}
               <div>
                 <h4 className="text-sm font-medium text-muted-foreground mb-3">
-                  Color de Fondo
+                  Background Color
                 </h4>
                 <div className="flex flex-wrap gap-3">
                   <button
                     onClick={() => setSelectedGradient("blue-purple")}
                     className={`w-12 h-12 rounded-lg bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-800 border-2 ${selectedGradient === "blue-purple" ? "border-blue-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`}
-                    title="Azul Púrpura"
+                    title="Blue Purple"
                   ></button>
                   <button
                     onClick={() => setSelectedGradient("emerald-teal")}
                     className={`w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-600 via-teal-600 to-cyan-800 border-2 ${selectedGradient === "emerald-teal" ? "border-teal-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`}
-                    title="Verde Esmeralda"
+                    title="Emerald Green"
                   ></button>
                   <button
                     onClick={() => setSelectedGradient("rose-red")}
                     className={`w-12 h-12 rounded-lg bg-gradient-to-br from-rose-600 via-pink-600 to-red-800 border-2 ${selectedGradient === "rose-red" ? "border-rose-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`}
-                    title="Rosa Rojo"
+                    title="Rose Red"
                   ></button>
                   <button
                     onClick={() => setSelectedGradient("amber-orange")}
                     className={`w-12 h-12 rounded-lg bg-gradient-to-br from-amber-600 via-orange-600 to-red-800 border-2 ${selectedGradient === "amber-orange" ? "border-amber-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`}
-                    title="Ámbar Naranja"
+                    title="Amber Orange"
                   ></button>
                   <button
                     onClick={() => setSelectedGradient("gray-slate")}
                     className={`w-12 h-12 rounded-lg bg-gradient-to-br from-gray-600 via-slate-600 to-gray-800 border-2 ${selectedGradient === "gray-slate" ? "border-gray-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform`}
-                    title="Gris Elegante"
+                    title="Elegant Gray"
                   ></button>
 
                   {/* Custom Color Picker Button */}
@@ -909,7 +935,7 @@ export function CreateCredential() {
                       setSelectedGradient("custom");
                       setShowColorPicker(!showColorPicker);
                     }}
-                    className={`w-12 h-12 rounded-lg border-2 ${selectedGradient === "custom" ? "border-purple-500" : "border-gray-300"} shadow-md hover:scale-105 transition-transform flex items-center justify-center bg-white`}
+                    className={`w-12 h-12 rounded-lg border-2 ${selectedGradient === "custom" ? "border-purple-500" : "border-white/20"} shadow-md hover:scale-105 transition-transform flex items-center justify-center bg-white/10 backdrop-blur-sm`}
                     style={
                       selectedGradient === "custom"
                         ? {
@@ -917,7 +943,7 @@ export function CreateCredential() {
                           }
                         : {}
                     }
-                    title="Paleta Personalizada"
+                    title="Custom Palette"
                   >
                     <svg
                       className="w-6 h-6 text-muted-foreground"
@@ -937,14 +963,14 @@ export function CreateCredential() {
 
                 {/* Color Picker Panel */}
                 {showColorPicker && (
-                  <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-white/5 backdrop-blur-sm">
+                  <div className="mt-4 p-4 border border-white/20 rounded-lg bg-white/5 backdrop-blur-sm">
                     <h5 className="text-sm font-medium text-muted-foreground mb-3">
-                      Colores Personalizados
+                      Custom Colors
                     </h5>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs text-muted-foreground mb-2">
-                          Color Inicial
+                          Start Color
                         </label>
                         <input
                           type="color"
@@ -955,12 +981,12 @@ export function CreateCredential() {
                               start: e.target.value,
                             }))
                           }
-                          className="w-full h-10 border border-gray-300 rounded cursor-pointer"
+                          className="w-full h-10 border border-white/20 rounded cursor-pointer bg-white/10 backdrop-blur-sm"
                         />
                       </div>
                       <div>
                         <label className="block text-xs text-muted-foreground mb-2">
-                          Color Final
+                          End Color
                         </label>
                         <input
                           type="color"
@@ -971,7 +997,7 @@ export function CreateCredential() {
                               end: e.target.value,
                             }))
                           }
-                          className="w-full h-10 border border-gray-300 rounded cursor-pointer"
+                          className="w-full h-10 border border-white/20 rounded cursor-pointer bg-white/10 backdrop-blur-sm"
                         />
                       </div>
                     </div>
@@ -982,13 +1008,13 @@ export function CreateCredential() {
               {/* Logo Selection */}
               <div>
                 <h4 className="text-sm font-medium text-muted-foreground mb-3">
-                  Estilo de Logo
+                  Logo Style
                 </h4>
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setSelectedLogo("starproof")}
-                      className={`p-3 ${selectedLogo === "starproof" ? "bg-blue-50 border-blue-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "starproof" ? "bg-blue-500/20 border-blue-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-blue-500/30 transition-colors flex items-center justify-center`}
                     >
                       <img
                         src="/white.png"
@@ -999,24 +1025,24 @@ export function CreateCredential() {
                     </button>
                     <button
                       onClick={() => setSelectedLogo("shield")}
-                      className={`p-3 ${selectedLogo === "shield" ? "bg-blue-50 border-blue-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "shield" ? "bg-blue-500/20 border-blue-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-blue-500/30 transition-colors flex items-center justify-center`}
                     >
                       <Shield className="w-6 h-6 mr-2 text-[#1B6BFF]" />
-                      <span className="text-sm font-medium">Escudo</span>
+                      <span className="text-sm font-medium">Shield</span>
                     </button>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setSelectedLogo("custom-text")}
-                      className={`p-3 ${selectedLogo === "custom-text" ? "bg-green-50 border-green-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-green-100 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "custom-text" ? "bg-green-500/20 border-green-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-green-500/30 transition-colors flex items-center justify-center`}
                     >
                       <span className="text-lg font-bold mr-2">ABC</span>
-                      <span className="text-sm font-medium">Texto</span>
+                      <span className="text-sm font-medium">Text</span>
                     </button>
                     <button
                       onClick={() => setSelectedLogo("custom-image")}
-                      className={`p-3 ${selectedLogo === "custom-image" ? "bg-purple-50 border-purple-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center`}
+                      className={`p-3 ${selectedLogo === "custom-image" ? "bg-purple-500/20 border-purple-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-purple-500/30 transition-colors flex items-center justify-center`}
                     >
                       <svg
                         className="w-6 h-6 mr-2 text-purple-600"
@@ -1031,7 +1057,7 @@ export function CreateCredential() {
                           d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
                         />
                       </svg>
-                      <span className="text-sm font-medium">Imagen</span>
+                      <span className="text-sm font-medium">Image</span>
                     </button>
                   </div>
 
@@ -1048,12 +1074,12 @@ export function CreateCredential() {
                           );
                           setCustomLogoText(e.target.value);
                         }}
-                        placeholder="Ingresa tu texto..."
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Enter your text..."
+                        className="w-full px-3 py-2 border border-white/20 rounded-lg bg-white/10 backdrop-blur-sm text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500/50"
                         autoFocus
                       />
-                      <p className="text-xs text-gray-500">
-                        El texto aparecerá como logo en tu credencial
+                      <p className="text-xs text-muted-foreground">
+                        The text will appear as the logo on your credential
                       </p>
                     </div>
                   )}
@@ -1061,7 +1087,7 @@ export function CreateCredential() {
                   {/* Custom Image Upload */}
                   {selectedLogo === "custom-image" && (
                     <div className="space-y-2">
-                      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-blue-400 transition-colors">
+                      <div className="border-2 border-dashed border-white/30 rounded-lg p-4 text-center hover:border-blue-400/60 transition-colors bg-white/5 backdrop-blur-sm">
                         {customLogoUrl ? (
                           <div className="space-y-2">
                             <img
@@ -1070,13 +1096,13 @@ export function CreateCredential() {
                               className="w-16 h-16 object-contain mx-auto"
                             />
                             <p className="text-sm text-green-400">
-                              Logo cargado correctamente
+                              Logo uploaded successfully
                             </p>
                           </div>
                         ) : (
                           <div className="space-y-2">
                             <svg
-                              className="mx-auto h-8 w-8 text-gray-400"
+                              className="mx-auto h-8 w-8 text-muted-foreground"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -1089,7 +1115,7 @@ export function CreateCredential() {
                               />
                             </svg>
                             <p className="text-sm text-muted-foreground">
-                              Sube tu logo
+                              Upload your logo
                             </p>
                           </div>
                         )}
@@ -1102,15 +1128,13 @@ export function CreateCredential() {
                         />
                         <label
                           htmlFor="logo-upload"
-                          className="cursor-pointer inline-block mt-2 px-3 py-1 bg-blue-50 text-[#1B6BFF] text-sm rounded hover:bg-blue-100 transition-colors"
+                          className="cursor-pointer inline-block mt-2 px-3 py-1 bg-blue-500/20 text-blue-400 text-sm rounded hover:bg-blue-500/30 transition-colors backdrop-blur-sm border border-blue-400/30"
                         >
-                          {customLogoUrl
-                            ? "Cambiar imagen"
-                            : "Seleccionar archivo"}
+                          {customLogoUrl ? "Change image" : "Select file"}
                         </label>
                       </div>
-                      <p className="text-xs text-gray-500">
-                        PNG, JPG, SVG hasta 2MB
+                      <p className="text-xs text-muted-foreground">
+                        PNG, JPG, SVG up to 2MB
                       </p>
                     </div>
                   )}
@@ -1120,22 +1144,22 @@ export function CreateCredential() {
               {/* Template Selection */}
               <div>
                 <h4 className="text-sm font-medium text-muted-foreground mb-3">
-                  Plantilla
+                  Template
                 </h4>
                 <div className="grid grid-cols-3 gap-3">
                   <button
                     onClick={() => setSelectedTemplate("classic")}
-                    className={`p-3 ${selectedTemplate === "classic" ? "bg-blue-50 border-blue-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-blue-100 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "classic" ? "bg-blue-500/20 border-blue-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-blue-500/30 transition-colors text-center`}
                   >
                     <CreditCard className="w-6 h-6 mx-auto mb-1 text-[#1B6BFF]" />
-                    <span className="text-xs font-medium">Clásica</span>
+                    <span className="text-xs font-medium">Classic</span>
                   </button>
                   <button
                     onClick={() => setSelectedTemplate("modern")}
-                    className={`p-3 ${selectedTemplate === "modern" ? "bg-purple-50 border-purple-200" : "bg-white/5 backdrop-blur-sm border-gray-300"} border-2 rounded-lg hover:bg-gray-100 transition-colors text-center`}
+                    className={`p-3 ${selectedTemplate === "modern" ? "bg-purple-500/20 border-purple-400/40" : "bg-white/5 backdrop-blur-sm border-white/20"} border-2 rounded-lg hover:bg-purple-500/30 transition-colors text-center`}
                   >
                     <Sparkles className="w-6 h-6 mx-auto mb-1 text-purple-600" />
-                    <span className="text-xs font-medium">Moderna</span>
+                    <span className="text-xs font-medium">Modern</span>
                   </button>
                   <button
                     onClick={() => setSelectedTemplate("corporate")}
@@ -1290,15 +1314,17 @@ export function CreateCredential() {
       {userCredentials.length > 0 && (
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-foreground">My Credentials</h2>
-            <div className="text-sm text-gray-500">
+            <h2 className="text-2xl font-bold text-foreground">
+              My Credentials
+            </h2>
+            <div className="text-sm text-muted-foreground">
               {userCredentials.length} credential
               {userCredentials.length !== 1 ? "s" : ""}
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {userCredentials.map((credential) => {
+            {userCredentials.map(credential => {
               const isFlipped = false;
               return (
                 <div key={credential.id} className="group">
@@ -1489,11 +1515,11 @@ export function CreateCredential() {
       {/* Credential Detail Modal */}
       {showDetailModal && selectedCredential && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
           onClick={() => setShowDetailModal(false)}
         >
           <div
-            className="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto"
+            className="bg-background/90 backdrop-blur-xl border border-white/20 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
@@ -1670,12 +1696,14 @@ export function CreateCredential() {
                   <h3 className="text-lg font-semibold text-foreground mb-4">
                     Verification QR Code
                   </h3>
-                  <div className="inline-block p-4 bg-white rounded-lg shadow-lg border">
-                    <img
-                      src={selectedCredential.qrCode}
-                      alt="Verification QR Code"
-                      className="w-48 h-48 mx-auto"
-                    />
+                  <div className="inline-block p-4 bg-white/10 backdrop-blur-sm rounded-lg shadow-lg border border-white/20">
+                    <div className="bg-white rounded p-3">
+                      <img
+                        src={selectedCredential.qrCode}
+                        alt="Verification QR Code"
+                        className="w-48 h-48 mx-auto"
+                      />
+                    </div>
                   </div>
                   <p className="text-sm text-muted-foreground mt-3">
                     Scan this QR code to verify the credential authenticity
@@ -1828,7 +1856,7 @@ export function CreateCredential() {
                     </label>
                     <div className="flex items-center space-x-2">
                       <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-green-700 font-medium">
+                      <span className="text-sm text-green-400 font-medium">
                         Active & Verified
                       </span>
                     </div>
